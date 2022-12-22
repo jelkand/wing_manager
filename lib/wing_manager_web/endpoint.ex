@@ -1,12 +1,12 @@
-defmodule PetalBoilerplateWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :petal_boilerplate
+defmodule WingManagerWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :wing_manager
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_petal_boilerplate_key",
+    key: "_wing_manager_key",
     signing_salt: "svUTG9wx",
     same_site: "Lax"
   ]
@@ -19,9 +19,9 @@ defmodule PetalBoilerplateWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :petal_boilerplate,
+    from: :wing_manager,
     gzip: false,
-    only: PetalBoilerplateWeb.static_paths()
+    only: WingManagerWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -29,7 +29,7 @@ defmodule PetalBoilerplateWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :petal_boilerplate
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :wing_manager
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,
@@ -47,5 +47,5 @@ defmodule PetalBoilerplateWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug PetalBoilerplateWeb.Router
+  plug WingManagerWeb.Router
 end

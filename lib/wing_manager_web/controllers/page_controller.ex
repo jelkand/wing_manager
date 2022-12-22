@@ -1,5 +1,5 @@
-defmodule PetalBoilerplateWeb.PageController do
-  use PetalBoilerplateWeb, :controller
+defmodule WingManagerWeb.PageController do
+  use WingManagerWeb, :controller
 
   def home(conn, _params) do
     render(conn, :home, active_tab: :home)

@@ -1,5 +1,5 @@
-defmodule PetalBoilerplateWeb.Layouts do
-  use PetalBoilerplateWeb, :html
+defmodule WingManagerWeb.Layouts do
+  use WingManagerWeb, :html
 
   embed_templates "layouts/*"
 end
