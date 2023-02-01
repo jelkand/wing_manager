@@ -14,10 +14,21 @@ defmodule WingManagerWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/auth", WingManagerWeb do
+    pipe_through :browser
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+  end
+
   scope "/", WingManagerWeb do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    get "/register", RegistrationController, :new
+    get "/login", SessionController, :new
+
+    # pregenerated, to clean up later
     live "/live", PageLive, :index
     live "/live/modal/:size", PageLive, :modal
     live "/live/slide_over/:origin", PageLive, :slide_over

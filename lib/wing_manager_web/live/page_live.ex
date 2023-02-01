@@ -7,8 +7,7 @@ defmodule WingManagerWeb.PageLive do
      assign(socket,
        modal: false,
        slide_over: false,
-       pagination_page: 1,
-       active_tab: :live
+       pagination_page: 1
      )}
   end
 

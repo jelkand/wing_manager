@@ -32,7 +32,7 @@ defmodule WingManager.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.7.0-rc.0", override: true},
+      {:phoenix, "~> 1.7.0-rc.2", override: true},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
@@ -50,7 +50,9 @@ defmodule WingManager.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:petal_components, "~> 0.19.0"}
+      {:petal_components, "~> 0.19.0"},
+      {:ueberauth, "~> 0.10"},
+      {:ueberauth_discord, "~> 0.7"}
     ]
   end
 

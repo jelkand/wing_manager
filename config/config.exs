@@ -29,6 +29,15 @@ config :wing_manager, WingManagerWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :wing_manager, WingManager.Mailer, adapter: Swoosh.Adapters.Local
 
+config :ueberauth, Ueberauth,
+  providers: [
+    discord: {Ueberauth.Strategy.Discord, []}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Discord.OAuth,
+  client_id: System.get_env("WING_MANAGER_DISCORD_CLIENT_ID"),
+  client_secret: System.get_env("WING_MANAGER_DISCORD_CLIENT_SECRET")
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.15.5",

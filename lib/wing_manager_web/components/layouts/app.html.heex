@@ -122,16 +122,8 @@
       </div>
     </nav>
 
-    <.container class="mt-10">
-      <.h1>Petal Components</.h1>
-
-      <.tabs class="!gap-x-4">
-        <.tab link_type="a" is_active={@active_tab == :home} to="/" label="Components" />
-        <.tab link_type="a" is_active={@active_tab == :live} to="/live" label="Live Components" />
-      </.tabs>
+    <.container class="mt-10" max_width="lg">
+      <%= @inner_content %>
     </.container>
-
-    <%= @inner_content %>
   </div>
-
 </main>
