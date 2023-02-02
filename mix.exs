@@ -52,7 +52,8 @@ defmodule WingManager.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:petal_components, "~> 0.19.0"},
       {:ueberauth, "~> 0.10"},
-      {:ueberauth_discord, "~> 0.7"}
+      {:ueberauth_discord, "~> 0.7"},
+      {:guardian, "~> 2.1"}
     ]
   end
 

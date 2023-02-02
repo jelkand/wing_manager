@@ -37,6 +37,16 @@ defmodule WingManager.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user_by_discord_id(discord_id), do: Repo.get_by(User, %{discord_id: discord_id})
+
+  def get_or_register_by_discord_id(%Ueberauth.Auth{uid: uid} = params) do
+    if account = get_user_by_discord_id(uid) do
+      {:ok, account}
+    else
+      register(params)
+    end
+  end
+
   @doc """
   Creates a user.
 
@@ -53,6 +63,32 @@ defmodule WingManager.Accounts do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def register(%Ueberauth.Auth{} = params) do
+    %User{}
+    |> User.changeset(extract_account_params(params))
+    |> Repo.insert()
+  end
+
+  defp extract_account_params(%Ueberauth.Auth{
+         uid: discord_id,
+         extra: %Ueberauth.Auth.Extra{
+           raw_info: %{
+             user: %{
+               "avatar" => discord_avatar_hash,
+               "discriminator" => discord_discriminator,
+               "username" => discord_username
+             }
+           }
+         }
+       }) do
+    %{
+      discord_id: discord_id,
+      discord_avatar_hash: discord_avatar_hash,
+      discord_discriminator: discord_discriminator,
+      discord_username: discord_username
+    }
   end
 
   @doc """

@@ -2,6 +2,11 @@ defmodule WingManagerWeb.PageController do
   use WingManagerWeb, :controller
 
   def home(conn, _params) do
-    render(conn, :home, active_tab: :home)
+    # current_user =
+    #   conn
+    #   |> Map.get(:private)
+    #   |> Map.get(:guardian_default_resource)
+
+    render(conn, :home)
   end
 end

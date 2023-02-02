@@ -15,6 +15,12 @@ defmodule WingManager.Accounts.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:discord_id, :discord_avatar_hash, :discord_username, :discord_discriminator])
-    |> validate_required([:discord_id, :discord_avatar_hash, :discord_username, :discord_discriminator])
+    |> validate_required([
+      :discord_id,
+      :discord_avatar_hash,
+      :discord_username,
+      :discord_discriminator
+    ])
+    |> unique_constraint([:discord_id])
   end
 end

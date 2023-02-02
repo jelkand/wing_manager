@@ -20,6 +20,10 @@ config :wing_manager, WingManagerWeb.Endpoint,
   secret_key_base: "10cUi5xvBJLqT92W/93/bMrQYfcVyE/myN9nnebmmQoDxGDn83PRMqYSZkAntu9D",
   server: false
 
+config :wing_manager, WingManager.Guardian,
+  issuer: "wing_manager",
+  secret_key: "eMoznuQEgS3oac6FdYMxBcsqKx2M+25+0YJfL9tqdJ9rD3zUXEpl25eui2KHKX+a"
+
 # In test we don't send emails.
 config :wing_manager, WingManager.Mailer, adapter: Swoosh.Adapters.Test
 

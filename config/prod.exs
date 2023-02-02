@@ -12,6 +12,10 @@ import Config
 config :wing_manager, WingManagerWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :wing_manager, WingManager.Guardian,
+  issuer: "wing_manager",
+  secret_key: System.get_env("WING_MANAGER_GUARDIAN_SECRET")
+
 # Configures Swoosh API Client
 config :swoosh, :api_client, WingManager.Finch
 

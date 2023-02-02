@@ -29,6 +29,10 @@ config :wing_manager, WingManagerWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
+config :wing_manager, WingManager.Accounts.Guardian,
+  issuer: "wing_manager",
+  secret_key: "eMoznuQEgS3oac6FdYMxBcsqKx2M+25+0YJfL9tqdJ9rD3zUXEpl25eui2KHKX+a"
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

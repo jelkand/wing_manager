@@ -14,14 +14,23 @@ defmodule WingManagerWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug WingManager.Accounts.Pipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
   scope "/auth", WingManagerWeb do
-    pipe_through :browser
+    pipe_through [:browser, :auth]
+    get "/logout", AuthController, :logout
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
   end
 
   scope "/", WingManagerWeb do
-    pipe_through :browser
+    pipe_through [:browser, :auth]
 
     get "/", PageController, :home
 
