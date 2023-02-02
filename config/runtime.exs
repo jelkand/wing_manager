@@ -48,6 +48,14 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
+  config :ueberauth, Ueberauth.Strategy.Discord.OAuth,
+    client_id: System.get_env("WING_MANAGER_DISCORD_CLIENT_ID"),
+    client_secret: System.get_env("WING_MANAGER_DISCORD_CLIENT_SECRET")
+
+  config :wing_manager, WingManager.Guardian,
+    issuer: "wing_manager",
+    secret_key: System.get_env("WING_MANAGER_GUARDIAN_SECRET")
+
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
