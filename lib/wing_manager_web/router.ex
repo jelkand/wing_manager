@@ -8,6 +8,7 @@ defmodule WingManagerWeb.Router do
     plug :put_root_layout, {WingManagerWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Triplex.SubdomainPlug, endpoint: WingManagerWeb.Endpoint
   end
 
   pipeline :api do
@@ -33,15 +34,6 @@ defmodule WingManagerWeb.Router do
     pipe_through [:browser, :auth]
 
     get "/", PageController, :home
-
-    get "/register", RegistrationController, :new
-    get "/login", SessionController, :new
-
-    # pregenerated, to clean up later
-    live "/live", PageLive, :index
-    live "/live/modal/:size", PageLive, :modal
-    live "/live/slide_over/:origin", PageLive, :slide_over
-    live "/live/pagination/:page", PageLive, :pagination
   end
 
   # Other scopes may use custom stacks.
