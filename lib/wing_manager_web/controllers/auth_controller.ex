@@ -1,6 +1,6 @@
 defmodule WingManagerWeb.AuthController do
   use WingManagerWeb, :controller
-  plug(Ueberauth)
+  plug Ueberauth
 
   alias WingManager.{Accounts, Accounts.Guardian}
 
@@ -18,7 +18,7 @@ defmodule WingManagerWeb.AuthController do
       {:error, _error_changeset} ->
         conn
         |> put_flash(:error, "Authentication failed.")
-        |> redirect(to: ~p"/  ")
+        |> redirect(to: ~p"/")
     end
   end
 

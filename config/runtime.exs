@@ -52,9 +52,9 @@ if config_env() == :prod do
     client_id: System.get_env("WING_MANAGER_DISCORD_CLIENT_ID"),
     client_secret: System.get_env("WING_MANAGER_DISCORD_CLIENT_SECRET")
 
-  config :wing_manager, WingManager.Guardian,
-    issuer: "wing_manager",
-    secret_key: System.get_env("WING_MANAGER_GUARDIAN_SECRET")
+  # config :wing_manager, WingManager.Accounts.Guardian,
+  #   issuer: "wing_manager",
+  #   secret_key: "eMoznuQEgS3oac6FdYMxBcsqKx2M+25+0YJfL9tqdJ9rD3zUXEpl25eui2KHKX+a"
 
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
