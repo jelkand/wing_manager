@@ -36,7 +36,7 @@ config :ueberauth, Ueberauth,
 
 config :wing_manager, WingManager.Accounts.Guardian,
   issuer: "wing_manager",
-  secret_key: System.get_env("WING_MANAGER_GUARDIAN_SECRET")
+  secret_key: "eMoznuQEgS3oac6FdYMxBcsqKx2M+25+0YJfL9tqdJ9rD3zUXEpl25eui2KHKX+a"
 
 # Configure esbuild (the version is required)
 config :esbuild,

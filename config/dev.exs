@@ -33,10 +33,6 @@ config :ueberauth, Ueberauth.Strategy.Discord.OAuth,
   client_id: System.get_env("WING_MANAGER_DISCORD_CLIENT_ID"),
   client_secret: System.get_env("WING_MANAGER_DISCORD_CLIENT_SECRET")
 
-# config :wing_manager, WingManager.Accounts.Guardian,
-#   issuer: "wing_manager",
-#   secret_key: System.get_env("WING_MANAGER_GUARDIAN_SECRET")
-
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
