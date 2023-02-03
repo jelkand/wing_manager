@@ -8,7 +8,10 @@ defmodule WingManagerWeb.Router do
     plug :put_root_layout, {WingManagerWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug Triplex.SubdomainPlug, endpoint: WingManagerWeb.Endpoint
+
+    plug Triplex.SubdomainPlug,
+      endpoint: WingManagerWeb.Endpoint,
+      tenant_handler: &WingManager.Wing.get_tenant_slug!/1
   end
 
   pipeline :api do
