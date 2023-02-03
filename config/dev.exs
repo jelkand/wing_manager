@@ -29,9 +29,9 @@ config :wing_manager, WingManagerWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
-config :ueberauth, Ueberauth.Strategy.Discord.OAuth,
-  client_id: System.get_env("WING_MANAGER_DISCORD_CLIENT_ID"),
-  client_secret: System.get_env("WING_MANAGER_DISCORD_CLIENT_SECRET")
+# config :ueberauth, Ueberauth.Strategy.Discord.OAuth,
+#   client_id: System.get_env("WING_MANAGER_DISCORD_CLIENT_ID"),
+#   client_secret: System.get_env("WING_MANAGER_DISCORD_CLIENT_SECRET")
 
 # ## SSL Support
 #

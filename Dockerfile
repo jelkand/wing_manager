@@ -39,9 +39,6 @@ COPY mix.exs mix.lock ./
 RUN mix deps.get --only $MIX_ENV
 RUN mkdir config
 
-RUN --mount=type=secret,id=WING_MANAGER_GUARDIAN_SECRET \
-    WING_MANAGER_GUARDIAN_SECRET=eMoznuQEgS3oac6FdYMxBcsqKx2M+25+0YJfL9tqdJ9rD3zUXEpl25eui2KHKX+a
-
 # copy compile-time config files before we compile dependencies
 # to ensure any relevant config change will trigger the dependencies
 # to be re-compiled.

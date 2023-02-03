@@ -34,10 +34,6 @@ config :ueberauth, Ueberauth,
     discord: {Ueberauth.Strategy.Discord, []}
   ]
 
-config :wing_manager, WingManager.Accounts.Guardian,
-  issuer: "wing_manager",
-  secret_key: "eMoznuQEgS3oac6FdYMxBcsqKx2M+25+0YJfL9tqdJ9rD3zUXEpl25eui2KHKX+a"
-
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.15.5",

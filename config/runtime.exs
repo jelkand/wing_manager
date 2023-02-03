@@ -20,6 +20,14 @@ if System.get_env("PHX_SERVER") do
   config :wing_manager, WingManagerWeb.Endpoint, server: true
 end
 
+config :ueberauth, Ueberauth.Strategy.Discord.OAuth,
+  client_id: System.get_env("WING_MANAGER_DISCORD_CLIENT_ID"),
+  client_secret: System.get_env("WING_MANAGER_DISCORD_CLIENT_SECRET")
+
+config :wing_manager, WingManager.Accounts.Guardian,
+  issuer: "wing_manager",
+  secret_key: System.get_env("WING_MANAGER_GUARDIAN_SECRET")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
@@ -47,10 +55,6 @@ if config_env() == :prod do
       environment variable SECRET_KEY_BASE is missing.
       You can generate one by calling: mix phx.gen.secret
       """
-
-  config :ueberauth, Ueberauth.Strategy.Discord.OAuth,
-    client_id: System.get_env("WING_MANAGER_DISCORD_CLIENT_ID"),
-    client_secret: System.get_env("WING_MANAGER_DISCORD_CLIENT_SECRET")
 
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
