@@ -53,7 +53,8 @@ defmodule WingManager.MixProject do
       {:petal_components, "~> 0.19.0"},
       {:ueberauth, "~> 0.10"},
       {:ueberauth_discord, "~> 0.7"},
-      {:guardian, "~> 2.1"}
+      {:guardian, "~> 2.1"},
+      {:triplex, "~> 1.3.0-rc.1"}
     ]
   end
 

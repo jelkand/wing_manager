@@ -6,7 +6,7 @@ defmodule WingManagerWeb.PageController do
     #   conn
     #   |> Map.get(:private)
     #   |> Map.get(:guardian_default_resource)
-
-    render(conn, :home)
+    conn
+    |> render(:home)
   end
 end
