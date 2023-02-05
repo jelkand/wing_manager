@@ -11,6 +11,9 @@ defmodule WingManagerWeb.CoreComponents do
   """
   use Phoenix.Component
 
+  use PetalComponents
+  import WingManagerWeb.PetalHelpers
+
   alias Phoenix.LiveView.JS
   import WingManagerWeb.Gettext
 
@@ -39,88 +42,149 @@ defmodule WingManagerWeb.CoreComponents do
   attr :on_cancel, JS, default: %JS{}
   attr :on_confirm, JS, default: %JS{}
 
+  attr :max_width, :string,
+    default: "md",
+    values: ["sm", "md", "lg", "xl", "2xl", "full"]
+
+  attr :rest, :global
+
   slot :inner_block, required: true
   slot :title
   slot :subtitle
   slot :confirm
   slot :cancel
 
+  # old header
+  # <div class="absolute top-6 right-5">
+  #   <button
+  #     phx-click={native_hide_modal(@on_cancel, @id)}
+  #     class="text-gray-400 hover:text-gray-500"
+  #     aria-label={gettext("close")}
+  #   >
+  #     <svg class="w-4 h-4 fill-current">
+  #       <path d="M7.95 6.536l4.242-4.243a1 1 0 111.415 1.414L9.364 7.95l4.243 4.242a1 1 0 11-1.415 1.415L7.95 9.364l-4.243 4.243a1 1 0 01-1.414-1.415L6.536 7.95 2.293 3.707a1 1 0 011.414-1.414L7.95 6.536z" />
+  #     </svg>
+  #   </button>
+  # </div>
+
+  # focus wrap old classes
+  # class="relative hidden transition bg-white shadow-lg rounded-2xl p-14 shadow-zinc-700/10 ring-1 ring-zinc-700/10"
   def phx_modal(assigns) do
+    assigns =
+      assigns
+      |> assign(:classes, get_classes(assigns))
+
     ~H"""
     <div
       id={@id}
-      phx-mounted={@show && show_modal(@id)}
-      phx-remove={hide_modal(@id)}
+      {@rest}
+      phx-mounted={@show && native_show_modal(@id)}
+      phx-remove={native_hide_modal(@on_cancel, @id)}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="fixed inset-0 transition-opacity bg-zinc-50/90" aria-hidden="true" />
       <div
-        class="fixed inset-0 overflow-y-auto"
+        id={"#{@id}-bg"}
+        class="fixed inset-0 z-50 transition-opacity bg-gray-900 animate-fade-in dark:bg-gray-900 bg-opacity-30 dark:bg-opacity-70"
+        aria-hidden="true"
+      />
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center px-4 my-4 overflow-hidden transform sm:px-6"
         aria-labelledby={"#{@id}-title"}
         aria-describedby={"#{@id}-description"}
         role="dialog"
         aria-modal="true"
         tabindex="0"
       >
-        <div class="flex items-center justify-center min-h-full">
-          <div class="w-full max-w-3xl p-4 sm:p-6 lg:py-8">
-            <.focus_wrap
-              id={"#{@id}-container"}
-              phx-mounted={@show && show_modal(@id)}
-              phx-window-keydown={hide_modal(@on_cancel, @id)}
-              phx-key="escape"
-              phx-click-away={hide_modal(@on_cancel, @id)}
-              class="relative hidden transition bg-white shadow-lg rounded-2xl p-14 shadow-zinc-700/10 ring-1 ring-zinc-700/10"
-            >
-              <div class="absolute top-6 right-5">
-                <button
-                  phx-click={hide_modal(@on_cancel, @id)}
-                  type="button"
-                  class="flex-none p-3 -m-3 opacity-20 hover:opacity-40"
-                  aria-label={gettext("close")}
-                >
-                  <Heroicons.x_mark solid class="w-5 h-5 stroke-current" />
-                </button>
-              </div>
-              <div id={"#{@id}-content"}>
-                <header :if={@title != []}>
-                  <h1 id={"#{@id}-title"} class="text-lg font-semibold leading-8 text-zinc-800">
+        <div id="idk" class={@classes}>
+          <.focus_wrap
+            id={"#{@id}-container"}
+            phx-mounted={@show && native_show_modal(@id)}
+            phx-window-keydown={native_hide_modal(@on_cancel, @id)}
+            phx-key="escape"
+            phx-click-away={native_hide_modal(@on_cancel, @id)}
+          >
+            <%!-- Header --%>
+            <header class="px-5 py-3 border-b border-gray-100 dark:border-gray-700">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div
+                    :if={@title != []}
+                    id={"#{@id}-title"}
+                    class="font-semibold text-gray-800 dark:text-gray-200"
+                  >
                     <%= render_slot(@title) %>
-                  </h1>
+                  </div>
                   <p
                     :if={@subtitle != []}
                     id={"#{@id}-description"}
-                    class="mt-2 text-sm leading-6 text-zinc-600"
+                    class=" text-sm text-gray-600 dark:text-gray-400"
                   >
                     <%= render_slot(@subtitle) %>
                   </p>
-                </header>
-                <%= render_slot(@inner_block) %>
-                <div :if={@confirm != [] or @cancel != []} class="flex items-center gap-5 mb-4 ml-6">
-                  <.phx_button
-                    :for={confirm <- @confirm}
-                    id={"#{@id}-confirm"}
-                    phx-click={@on_confirm}
-                    phx-disable-with
-                    class="px-3 py-2"
-                  >
-                    <%= render_slot(confirm) %>
-                  </.phx_button>
-                  <.link
-                    :for={cancel <- @cancel}
-                    phx-click={hide_modal(@on_cancel, @id)}
-                    class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-                  >
-                    <%= render_slot(cancel) %>
-                  </.link>
                 </div>
+
+                <button
+                  phx-click={native_hide_modal(@on_cancel, @id)}
+                  class="text-gray-400 hover:text-gray-500"
+                >
+                  <div class="sr-only">Close</div>
+                  <svg class="w-4 h-4 fill-current">
+                    <path d="M7.95 6.536l4.242-4.243a1 1 0 111.415 1.414L9.364 7.95l4.243 4.242a1 1 0 11-1.415 1.415L7.95 9.364l-4.243 4.243a1 1 0 01-1.414-1.415L6.536 7.95 2.293 3.707a1 1 0 011.414-1.414L7.95 6.536z" />
+                  </svg>
+                </button>
               </div>
-            </.focus_wrap>
-          </div>
+            </header>
+            <%!-- Content --%>
+            <div id={"#{@id}-content"} class="p-5">
+              <%= render_slot(@inner_block) %>
+              <div :if={@confirm != [] or @cancel != []} class="flex items-center gap-5 mb-4 ml-6">
+                <.phx_button
+                  :for={confirm <- @confirm}
+                  id={"#{@id}-confirm"}
+                  phx-click={@on_confirm}
+                  phx-disable-with
+                  class="px-3 py-2"
+                >
+                  <%= render_slot(confirm) %>
+                </.phx_button>
+                <.link
+                  :for={cancel <- @cancel}
+                  phx-click={native_hide_modal(@on_cancel, @id)}
+                  class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                >
+                  <%= render_slot(cancel) %>
+                </.link>
+              </div>
+            </div>
+          </.focus_wrap>
         </div>
       </div>
     </div>
     """
+  end
+
+  defp get_classes(assigns) do
+    opts = %{
+      max_width: assigns[:max_width] || "md",
+      class: assigns[:class] || ""
+    }
+
+    base_classes =
+      "animate-fade-in-scale w-full max-h-full overflow-auto bg-white rounded shadow-lg dark:bg-gray-800"
+
+    max_width_class =
+      case opts.max_width do
+        "sm" -> "max-w-sm"
+        "md" -> "max-w-xl"
+        "lg" -> "max-w-3xl"
+        "xl" -> "max-w-5xl"
+        "2xl" -> "max-w-7xl"
+        "full" -> "max-w-full"
+      end
+
+    custom_classes = opts.class
+
+    build_class([max_width_class, base_classes, custom_classes])
   end
 
   @doc """
@@ -450,20 +514,22 @@ defmodule WingManagerWeb.CoreComponents do
   def phx_table(assigns) do
     ~H"""
     <div id={@id} class="px-4 overflow-y-auto sm:overflow-visible sm:px-0">
-      <table class="mt-11 w-[40rem] sm:w-full">
+      <.table class="mt-11 w-[40rem] sm:w-full">
         <thead class="text-left text-[0.8125rem] leading-6 text-zinc-500">
-          <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
-            <th class="relative p-0 pb-4"><span class="sr-only"><%= gettext("Actions") %></span></th>
-          </tr>
+          <.tr>
+            <.th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></.th>
+            <.th class="relative p-0 pb-4">
+              <span class="sr-only"><%= gettext("Actions") %></span>
+            </.th>
+          </.tr>
         </thead>
         <tbody class="relative text-sm leading-6 border-t divide-y divide-zinc-100 border-zinc-200 text-zinc-700">
-          <tr
+          <.tr
             :for={row <- @rows}
             id={"#{@id}-#{Phoenix.Param.to_param(row)}"}
             class="relative group hover:bg-zinc-50"
           >
-            <td
+            <.td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
               class={["p-0", @row_click && "hover:cursor-pointer"]}
@@ -477,8 +543,8 @@ defmodule WingManagerWeb.CoreComponents do
                   <%= render_slot(col, row) %>
                 </span>
               </div>
-            </td>
-            <td :if={@action != []} class="p-0 w-14">
+            </.td>
+            <.td :if={@action != []} class="p-0 w-14">
               <div class="relative py-4 text-sm font-medium text-right whitespace-nowrap">
                 <span
                   :for={action <- @action}
@@ -487,10 +553,10 @@ defmodule WingManagerWeb.CoreComponents do
                   <%= render_slot(action, row) %>
                 </span>
               </div>
-            </td>
-          </tr>
+            </.td>
+          </.tr>
         </tbody>
-      </table>
+      </.table>
     </div>
     """
   end
@@ -667,7 +733,7 @@ defmodule WingManagerWeb.CoreComponents do
     )
   end
 
-  def show_modal(js \\ %JS{}, id) when is_binary(id) do
+  def native_show_modal(js \\ %JS{}, id) when is_binary(id) do
     js
     |> JS.show(to: "##{id}")
     |> JS.show(
@@ -679,7 +745,7 @@ defmodule WingManagerWeb.CoreComponents do
     |> JS.focus_first(to: "##{id}-content")
   end
 
-  def hide_modal(js \\ %JS{}, id) do
+  def native_hide_modal(js \\ %JS{}, id) do
     js
     |> JS.hide(
       to: "##{id}-bg",
