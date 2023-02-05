@@ -20,15 +20,15 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={{f, :callsign}} type="text" label="Callsign" />
-        <.input field={{f, :title}} type="text" label="Title" />
-        <.input
-          field={{f, :roles}}
+        <.form_field field={:callsign} type="text_input" label="Callsign" form={f} />
+        <.form_field field={:title} type="text_input" label="Title" form={f} />
+        <%!-- <.form_field
+          form={f}
+          field={:roles}
           type="select"
-          multiple
           label="Roles"
           options={[{"Option 1", "option1"}, {"Option 2", "option2"}]}
-        />
+        /> --%>
         <:actions>
           <.button phx-disable-with="Saving...">Save Pilot</.button>
         </:actions>

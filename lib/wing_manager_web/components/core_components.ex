@@ -138,7 +138,7 @@ defmodule WingManagerWeb.CoreComponents do
             <div id={"#{@id}-content"} class="p-5">
               <%= render_slot(@inner_block) %>
               <div :if={@confirm != [] or @cancel != []} class="flex items-center gap-5 mb-4 ml-6">
-                <.phx_button
+                <.button
                   :for={confirm <- @confirm}
                   id={"#{@id}-confirm"}
                   phx-click={@on_confirm}
@@ -146,7 +146,7 @@ defmodule WingManagerWeb.CoreComponents do
                   class="px-3 py-2"
                 >
                   <%= render_slot(confirm) %>
-                </.phx_button>
+                </.button>
                 <.link
                   :for={cancel <- @cancel}
                   phx-click={native_hide_modal(@on_cancel, @id)}
@@ -247,7 +247,7 @@ defmodule WingManagerWeb.CoreComponents do
         <.input field={{f, :email}} label="Email"/>
         <.input field={{f, :username}} label="Username" />
         <:actions>
-          <.phx_button>Save</.phx_button>
+          <.button>Save</.button>
         </:actions>
       </.simple_form>
   """
@@ -264,43 +264,13 @@ defmodule WingManagerWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="mt-10 space-y-8">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="flex items-center justify-between gap-6 mt-2">
           <%= render_slot(action, f) %>
         </div>
       </div>
     </.form>
-    """
-  end
-
-  @doc """
-  Renders a button.
-
-  ## Examples
-
-      <.phx_button>Send!</.phx_button>
-      <.phx_button phx-click="go" class="ml-2">Send!</.phx_button>
-  """
-  attr :type, :string, default: nil
-  attr :class, :string, default: nil
-  attr :rest, :global, include: ~w(disabled form name value)
-
-  slot :inner_block, required: true
-
-  def phx_button(assigns) do
-    ~H"""
-    <button
-      type={@type}
-      class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
-        @class
-      ]}
-      {@rest}
-    >
-      <%= render_slot(@inner_block) %>
-    </button>
     """
   end
 
@@ -479,10 +449,10 @@ defmodule WingManagerWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-lg font-semibold leading-8 text-gray-700 dark:text-gray-400">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -532,7 +502,7 @@ defmodule WingManagerWeb.CoreComponents do
             <.td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["p-0", @row_click && "hover:cursor-pointer"]}
+              class={"p-0 #{@row_click && "hover:cursor-pointer"}"}
             >
               <div :if={i == 0}>
                 <span class="absolute top-0 w-4 h-full -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
