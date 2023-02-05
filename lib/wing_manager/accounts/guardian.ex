@@ -8,18 +8,10 @@ defmodule WingManager.Accounts.Guardian do
     {:ok, sub}
   end
 
-  # def subject_for_token(_, _) do
-  #   {:error, :reason_for_error}
-  # end
-
   def resource_from_claims(%{"sub" => id}) do
     user = Accounts.get_user!(id)
     {:ok, user}
   rescue
     Ecto.NoResultsError -> {:error, :resource_not_found}
   end
-
-  # def log_in(conn, account) do
-  #   __MODULE__.Plug.sign_in(conn, account)
-  # end
 end

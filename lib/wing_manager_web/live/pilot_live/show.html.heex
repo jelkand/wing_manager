@@ -1,0 +1,40 @@
+<.header>
+  Pilot <%= @pilot.id %>
+  <:subtitle>This is a pilot record from your database.</:subtitle>
+  <:actions>
+    <.link
+      patch={~p"/#{@current_tenant.slug}/pilots/#{@pilot}/show/edit"}
+      phx-click={JS.push_focus()}
+    >
+      <.phx_button>Edit pilot</.phx_button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Callsign"><%= @pilot.callsign %></:item>
+  <:item title="Title"><%= @pilot.title %></:item>
+  <:item title="Roles"><%= @pilot.roles %></:item>
+</.list>
+
+<.back navigate={~p"/#{@current_tenant.slug}/pilots"}>Back to pilots</.back>
+
+<.phx_modal
+  :if={@live_action == :edit}
+  id="pilot-modal"
+  show
+  title={@page_title}
+  max_width="md"
+  on_cancel={JS.patch(~p"/#{@current_tenant.slug}/pilots/#{@pilot}")}
+>
+  <:title><%= @page_title %></:title>
+  <:subtitle>this is a subtitle</:subtitle>
+  <.live_component
+    module={WingManagerWeb.PilotLive.FormComponent}
+    id={@pilot.id}
+    title={@page_title}
+    action={@live_action}
+    pilot={@pilot}
+    navigate={~p"/#{@current_tenant.slug}/pilots/#{@pilot}"}
+  />
+</.phx_modal>

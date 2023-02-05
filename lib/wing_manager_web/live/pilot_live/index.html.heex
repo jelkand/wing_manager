@@ -1,0 +1,70 @@
+<.header class="dark:text-white">
+  Listing Pilots
+  <:actions>
+    <.link patch={~p"/#{@current_tenant.slug}/pilots/new"}>
+      <.phx_button>New Pilot</.phx_button>
+    </.link>
+  </:actions>
+</.header>
+
+<.phx_table
+  id="pilots"
+  rows={@pilots}
+  row_click={&JS.navigate(~p"/#{@current_tenant.slug}/pilots/#{&1}")}
+>
+  <:col :let={pilot} label="Callsign"><%= pilot.callsign %></:col>
+  <:col :let={pilot} label="Title"><%= pilot.title %></:col>
+  <:col :let={pilot} label="Roles"><%= pilot.roles %></:col>
+  <:action :let={pilot}>
+    <div class="sr-only">
+      <.link navigate={~p"/#{@current_tenant.slug}/pilots/#{pilot}"}>Show</.link>
+    </div>
+    <.link patch={~p"/#{@current_tenant.slug}/pilots/#{pilot}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={pilot}>
+    <.link phx-click={JS.push("delete", value: %{id: pilot.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.phx_table>
+
+<%!-- <%= if @live_action == :modal do %>
+  <.modal max_width="sm|md|lg|xl|2xl|full" title="Modal">
+    <.p>Content</.p>
+
+    <div class="flex justify-end">
+      <.button label="close" phx-click={PetalComponents.Modal.hide_modal()} />
+    </div>
+  </.modal>
+<% end %> --%>
+
+<.phx_modal
+  :if={@live_action in [:new, :edit]}
+  id="pilot-modal"
+  show
+  on_cancel={JS.navigate(~p"/#{@current_tenant.slug}/pilots")}
+>
+  <.live_component
+    module={WingManagerWeb.PilotLive.FormComponent}
+    id={@pilot.id || :new}
+    title={@page_title}
+    action={@live_action}
+    pilot={@pilot}
+    navigate={~p"/pilots"}
+  />
+</.phx_modal>
+<%!-- <.phx_modal
+  :if={@live_action in [:new, :edit]}
+  show
+  title={@page_title}
+  on_cancel={JS.navigate(~p"/#{@current_tenant.slug}/pilots")}
+>
+  <.live_component
+    module={WingManagerWeb.PilotLive.FormComponent}
+    id={@pilot.id || :new}
+    title={@page_title}
+    action={@live_action}
+    pilot={@pilot}
+    navigate={~p"/pilots"}
+  />
+</.phx_modal> --%>

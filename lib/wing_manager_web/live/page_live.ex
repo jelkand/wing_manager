@@ -46,12 +46,12 @@ defmodule WingManagerWeb.PageLive do
 
       <.h2 underline class="mt-10" label="Modal" />
 
-      <.button label="sm" link_type="live_patch" to={~p"/live/modal/sm"} />
+      <%!-- <.button label="sm" link_type="live_patch" to={~p"/live/modal/sm"} />
       <.button label="md" link_type="live_patch" to={~p"/live/modal/md"} />
       <.button label="lg" link_type="live_patch" to={~p"/live/modal/lg"} />
       <.button label="xl" link_type="live_patch" to={~p"/live/modal/xl"} />
       <.button label="2xl" link_type="live_patch" to={~p"/live/modal/2xl"} />
-      <.button label="full" link_type="live_patch" to={~p"/live/modal/full"} />
+      <.button label="full" link_type="live_patch" to={~p"/live/modal/full"} /> --%>
 
       <%= if @modal do %>
         <.modal max_width={@modal} title="Modal">
@@ -66,10 +66,10 @@ defmodule WingManagerWeb.PageLive do
 
       <.h2 underline class="mt-10" label="SlideOver" />
 
-      <.button label="left" link_type="live_patch" to={~p"/live/slide_over/left"} />
-      <.button label="top" link_type="live_patch" to={~p"/live/slide_over/top"} />
-      <.button label="right" link_type="live_patch" to={~p"/live/slide_over/right"} />
-      <.button label="bottom" link_type="live_patch" to={~p"/live/slide_over/bottom"} />
+      <%!-- <.button label="left" link_type="live_patch" to={~p"/live/slide_over/left"} /> --%>
+      <%!-- <.button label="top" link_type="live_patch" to={~p"/live/slide_over/top"} /> --%>
+      <%!-- <.button label="right" link_type="live_patch" to={~p"/live/slide_over/right"} /> --%>
+      <%!-- <.button label="bottom" link_type="live_patch" to={~p"/live/slide_over/bottom"} /> --%>
 
       <%= if @slide_over do %>
         <.slide_over origin={@slide_over} title="SlideOver">

@@ -9,9 +9,9 @@ defmodule WingManagerWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
 
-    plug Triplex.SubdomainPlug,
-      endpoint: WingManagerWeb.Endpoint,
-      tenant_handler: &WingManager.Wing.get_tenant_slug!/1
+    plug Triplex.ParamPlug,
+      param: :wing,
+      tenant_handler: &WingManager.Wing.get_tenant_by_slug/1
   end
 
   pipeline :api do
@@ -26,6 +26,12 @@ defmodule WingManagerWeb.Router do
     plug Guardian.Plug.EnsureAuthenticated
   end
 
+  # pipeline :ensure_tenant do
+  #   plug Triplex.EnsurePlug,
+  #     callback: fn -> nil end,
+  #     failure_callback: fn -> nil end
+  # end
+
   scope "/auth", WingManagerWeb do
     pipe_through [:browser, :auth]
     get "/logout", AuthController, :logout
@@ -33,10 +39,27 @@ defmodule WingManagerWeb.Router do
     get "/:provider/callback", AuthController, :callback
   end
 
+  scope "/:wing", WingManagerWeb do
+    pipe_through [:browser, :auth]
+
+    get "/", PageController, :home
+
+    live "/pilots", PilotLive.Index, :index
+    live "/pilots/new", PilotLive.Index, :new
+    live "/pilots/:id/edit", PilotLive.Index, :edit
+
+    live "/pilots/:id", PilotLive.Show, :show
+    live "/pilots/:id/show/edit", PilotLive.Show, :edit
+  end
+
   scope "/", WingManagerWeb do
     pipe_through [:browser, :auth]
 
     get "/", PageController, :home
+  end
+
+  scope "/admin", WingManagerWeb do
+    pipe_through [:browser, :auth]
   end
 
   # Other scopes may use custom stacks.

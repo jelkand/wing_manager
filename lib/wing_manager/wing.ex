@@ -37,8 +37,8 @@ defmodule WingManager.Wing do
   """
   def get_tenant!(id), do: Repo.get!(Tenant, id)
 
-  def get_tenant_slug!(nil), do: nil
-  def get_tenant_slug!(slug), do: Repo.get_by(Tenant, slug: String.downcase(slug))
+  def get_tenant_by_slug(nil), do: nil
+  def get_tenant_by_slug(slug), do: Repo.get_by(Tenant, slug: String.downcase(slug))
 
   @doc """
   Creates a tenant.
