@@ -23,8 +23,6 @@
   :if={@live_action == :edit}
   id="pilot-modal"
   show
-  title={@page_title}
-  max_width="md"
   on_cancel={JS.patch(~p"/#{@current_tenant.slug}/pilots/#{@pilot}")}
 >
   <:title><%= @page_title %></:title>
@@ -32,6 +30,7 @@
   <.live_component
     module={WingManagerWeb.PilotLive.FormComponent}
     id={@pilot.id}
+    tenant={@current_tenant.slug}
     title={@page_title}
     action={@live_action}
     pilot={@pilot}

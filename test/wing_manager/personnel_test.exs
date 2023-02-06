@@ -21,7 +21,11 @@ defmodule WingManager.PersonnelTest do
     end
 
     test "create_pilot/1 with valid data creates a pilot" do
-      valid_attrs = %{callsign: "some callsign", roles: ["option1", "option2"], title: "some title"}
+      valid_attrs = %{
+        callsign: "some callsign",
+        roles: ["option1", "option2"],
+        title: "some title"
+      }
 
       assert {:ok, %Pilot{} = pilot} = Personnel.create_pilot(valid_attrs)
       assert pilot.callsign == "some callsign"
@@ -35,7 +39,12 @@ defmodule WingManager.PersonnelTest do
 
     test "update_pilot/2 with valid data updates the pilot" do
       pilot = pilot_fixture()
-      update_attrs = %{callsign: "some updated callsign", roles: ["option1"], title: "some updated title"}
+
+      update_attrs = %{
+        callsign: "some updated callsign",
+        roles: ["option1"],
+        title: "some updated title"
+      }
 
       assert {:ok, %Pilot{} = pilot} = Personnel.update_pilot(pilot, update_attrs)
       assert pilot.callsign == "some updated callsign"

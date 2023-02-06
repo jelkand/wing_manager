@@ -12,7 +12,7 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
         <:subtitle>Use this form to manage pilot records in your database.</:subtitle>
       </.header>
 
-      <.form
+      <.simple_form
         :let={f}
         for={@changeset}
         id="pilot-form"
@@ -22,17 +22,10 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
       >
         <.form_field field={:callsign} type="text_input" label="Callsign" form={f} />
         <.form_field field={:title} type="text_input" label="Title" form={f} />
-        <%!-- <.form_field
-          form={f}
-          field={:roles}
-          type="select"
-          label="Roles"
-          options={[{"Option 1", "option1"}, {"Option 2", "option2"}]}
-        /> --%>
-        <%!-- <:actions> --%>
-        <.button phx-disable-with="Saving..." type="submit">Save Pilot</.button>
-        <%!-- </:actions> --%>
-      </.form>
+        <:actions>
+          <.button phx-disable-with="Saving..." type="submit">Save Pilot</.button>
+        </:actions>
+      </.simple_form>
     </div>
     """
   end
@@ -58,13 +51,15 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
   end
 
   def handle_event("save", %{"pilot" => pilot_params}, socket) do
-    save_pilot(socket, socket.assigns.action, pilot_params)
+    save_pilot(socket, socket.assigns.action, pilot_params, socket.assigns.tenant)
   end
 
-  defp save_pilot(socket, :edit, pilot_params) do
-    IO.puts("here")
-
-    case Personnel.update_pilot(socket.assigns.pilot, pilot_params, "cjtf") |> IO.inspect() do
+  defp save_pilot(socket, :edit, pilot_params, tenant) do
+    case Personnel.update_pilot(
+           socket.assigns.pilot,
+           pilot_params,
+           tenant
+         ) do
       {:ok, _pilot} ->
         {:noreply,
          socket
@@ -76,8 +71,8 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
     end
   end
 
-  defp save_pilot(socket, :new, pilot_params) do
-    case Personnel.create_pilot(pilot_params) do
+  defp save_pilot(socket, :new, pilot_params, tenant) do
+    case Personnel.create_pilot(pilot_params, tenant) do
       {:ok, _pilot} ->
         {:noreply,
          socket

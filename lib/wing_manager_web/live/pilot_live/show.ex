@@ -15,7 +15,7 @@ defmodule WingManagerWeb.PilotLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:pilot, Personnel.get_pilot!(id, "cjtf"))}
+     |> assign(:pilot, Personnel.get_pilot!(id, socket.assigns.current_tenant.slug))}
   end
 
   defp page_title(:show), do: "Show Pilot"

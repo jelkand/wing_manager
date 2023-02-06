@@ -28,43 +28,21 @@
   </:action>
 </.phx_table>
 
-<%!-- <%= if @live_action == :modal do %>
-  <.modal max_width="sm|md|lg|xl|2xl|full" title="Modal">
-    <.p>Content</.p>
-
-    <div class="flex justify-end">
-      <.button label="close" phx-click={PetalComponents.Modal.hide_modal()} />
-    </div>
-  </.modal>
-<% end %> --%>
-
 <.phx_modal
   :if={@live_action in [:new, :edit]}
   id="pilot-modal"
   show
   on_cancel={JS.navigate(~p"/#{@current_tenant.slug}/pilots")}
 >
+  <:title><%= @page_title %></:title>
+  <:subtitle>this is a subtitle</:subtitle>
   <.live_component
     module={WingManagerWeb.PilotLive.FormComponent}
     id={@pilot.id || :new}
+    tenant={@current_tenant.slug}
     title={@page_title}
     action={@live_action}
     pilot={@pilot}
-    navigate={~p"/pilots"}
+    navigate={~p"/#{@current_tenant.slug}/pilots"}
   />
 </.phx_modal>
-<%!-- <.phx_modal
-  :if={@live_action in [:new, :edit]}
-  show
-  title={@page_title}
-  on_cancel={JS.navigate(~p"/#{@current_tenant.slug}/pilots")}
->
-  <.live_component
-    module={WingManagerWeb.PilotLive.FormComponent}
-    id={@pilot.id || :new}
-    title={@page_title}
-    action={@live_action}
-    pilot={@pilot}
-    navigate={~p"/pilots"}
-  />
-</.phx_modal> --%>
