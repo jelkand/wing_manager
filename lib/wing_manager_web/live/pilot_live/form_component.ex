@@ -12,7 +12,7 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
         <:subtitle>Use this form to manage pilot records in your database.</:subtitle>
       </.header>
 
-      <.simple_form
+      <.form
         :let={f}
         for={@changeset}
         id="pilot-form"
@@ -29,10 +29,10 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
           label="Roles"
           options={[{"Option 1", "option1"}, {"Option 2", "option2"}]}
         /> --%>
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Pilot</.button>
-        </:actions>
-      </.simple_form>
+        <%!-- <:actions> --%>
+        <.button phx-disable-with="Saving..." type="submit">Save Pilot</.button>
+        <%!-- </:actions> --%>
+      </.form>
     </div>
     """
   end
@@ -62,7 +62,9 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
   end
 
   defp save_pilot(socket, :edit, pilot_params) do
-    case Personnel.update_pilot(socket.assigns.pilot, pilot_params, "cjtf") do
+    IO.puts("here")
+
+    case Personnel.update_pilot(socket.assigns.pilot, pilot_params, "cjtf") |> IO.inspect() do
       {:ok, _pilot} ->
         {:noreply,
          socket
