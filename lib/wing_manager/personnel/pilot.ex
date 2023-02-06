@@ -15,6 +15,6 @@ defmodule WingManager.Personnel.Pilot do
   def changeset(pilot, attrs) do
     pilot
     |> cast(attrs, [:callsign, :title, :roles])
-    |> validate_required([:callsign, :title, :roles])
+    |> validate_required([:callsign])
   end
 end
