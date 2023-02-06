@@ -54,19 +54,6 @@ defmodule WingManagerWeb.CoreComponents do
   slot :confirm
   slot :cancel
 
-  # old header
-  # <div class="absolute top-6 right-5">
-  #   <button
-  #     phx-click={native_hide_modal(@on_cancel, @id)}
-  #     class="text-gray-400 hover:text-gray-500"
-  #     aria-label={gettext("close")}
-  #   >
-  #     <svg class="w-4 h-4 fill-current">
-  #       <path d="M7.95 6.536l4.242-4.243a1 1 0 111.415 1.414L9.364 7.95l4.243 4.242a1 1 0 11-1.415 1.415L7.95 9.364l-4.243 4.243a1 1 0 01-1.414-1.415L6.536 7.95 2.293 3.707a1 1 0 011.414-1.414L7.95 6.536z" />
-  #     </svg>
-  #   </button>
-  # </div>
-
   # focus wrap old classes
   # class="relative hidden transition bg-white shadow-lg rounded-2xl p-14 shadow-zinc-700/10 ring-1 ring-zinc-700/10"
   def phx_modal(assigns) do
@@ -79,7 +66,7 @@ defmodule WingManagerWeb.CoreComponents do
       id={@id}
       {@rest}
       phx-mounted={@show && native_show_modal(@id)}
-      phx-remove={native_hide_modal(@on_cancel, @id)}
+      phx-remove={native_hide_modal(@id)}
       class="relative z-50 hidden"
     >
       <div
@@ -509,7 +496,7 @@ defmodule WingManagerWeb.CoreComponents do
                 <span class="absolute top-0 w-4 h-full -right-4 group-hover:bg-zinc-50 sm:rounded-r-xl" />
               </div>
               <div class="block py-4 pr-6">
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
+                <span class={["relative", i == 0 && "font-semibold text-gray-900 dark:text-gray-200"]}>
                   <%= render_slot(col, row) %>
                 </span>
               </div>
@@ -518,7 +505,7 @@ defmodule WingManagerWeb.CoreComponents do
               <div class="relative py-4 text-sm font-medium text-right whitespace-nowrap">
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-6 text-gray-900 hover:text-gray-700 dark:text-gray-200"
                 >
                   <%= render_slot(action, row) %>
                 </span>
