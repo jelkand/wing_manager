@@ -23,4 +23,19 @@ defmodule WingManager.WingFixtures do
 
     tenant
   end
+
+  @doc """
+  Generate a tenant.
+  """
+  def tenant_fixture(attrs \\ %{}) do
+    {:ok, tenant} =
+      attrs
+      |> Enum.into(%{
+        name: "some name",
+        slug: "some slug"
+      })
+      |> WingManager.Wing.create_tenant()
+
+    tenant
+  end
 end

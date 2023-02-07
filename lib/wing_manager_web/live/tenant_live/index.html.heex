@@ -1,0 +1,44 @@
+<.header>
+  Listing Tenants
+  <:actions>
+    <.link patch={~p"/tenants/new"}>
+      <.button>New Tenant</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.phx_table id="tenants" rows={@tenants} row_click={&JS.navigate(~p"/tenants/#{&1}")}>
+  <:col :let={tenant} label="Name"><%= tenant.name %></:col>
+  <:col :let={tenant} label="Slug"><%= tenant.slug %></:col>
+  <:action :let={tenant}>
+    <.link navigate={~p"/#{tenant.slug}/pilots"}>Use</.link>
+  </:action>
+  <:action :let={tenant}>
+    <div class="sr-only">
+      <.link navigate={~p"/tenants/#{tenant}"}>Show</.link>
+    </div>
+    <.link patch={~p"/tenants/#{tenant}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={tenant}>
+    <.link phx-click={JS.push("delete", value: %{id: tenant.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.phx_table>
+
+<.phx_modal
+  :if={@live_action in [:new, :edit]}
+  id="tenant-modal"
+  show
+  on_cancel={JS.navigate(~p"/tenants")}
+>
+  <:title><%= @page_title %></:title>
+  <.live_component
+    module={WingManagerWeb.TenantLive.FormComponent}
+    id={@tenant.id || :new}
+    title={@page_title}
+    action={@live_action}
+    tenant={@tenant}
+    navigate={~p"/tenants"}
+  />
+</.phx_modal>

@@ -17,4 +17,10 @@ defmodule WingManagerWeb.LiveTenant do
 
     {:cont, socket}
   end
+
+  def on_mount(:default, _params, _session, socket) do
+    socket = assign(socket, :current_tenant, nil)
+
+    {:cont, socket}
+  end
 end

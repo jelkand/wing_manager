@@ -1,0 +1,33 @@
+<.header>
+  Tenant <%= @tenant.id %>
+  <:subtitle>This is a tenant record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/tenants/#{@tenant}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit tenant</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @tenant.name %></:item>
+  <:item title="Slug"><%= @tenant.slug %></:item>
+</.list>
+
+<.back navigate={~p"/tenants"}>Back to tenants</.back>
+
+<.phx_modal
+  :if={@live_action == :edit}
+  id="tenant-modal"
+  show
+  on_cancel={JS.patch(~p"/tenants/#{@tenant}")}
+>
+  <:title><%= @page_title %></:title>
+  <.live_component
+    module={WingManagerWeb.TenantLive.FormComponent}
+    id={@tenant.id}
+    title={@page_title}
+    action={@live_action}
+    tenant={@tenant}
+    navigate={~p"/tenants/#{@tenant}"}
+  />
+</.phx_modal>

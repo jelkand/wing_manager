@@ -39,6 +39,19 @@ defmodule WingManagerWeb.Router do
     get "/:provider/callback", AuthController, :callback
   end
 
+  scope "/", WingManagerWeb do
+    pipe_through [:browser, :auth]
+
+    get "/", PageController, :home
+
+    live "/tenants", TenantLive.Index, :index
+    live "/tenants/new", TenantLive.Index, :new
+    live "/tenants/:id/edit", TenantLive.Index, :edit
+
+    live "/tenants/:id", TenantLive.Show, :show
+    live "/tenants/:id/show/edit", TenantLive.Show, :edit
+  end
+
   scope "/:wing", WingManagerWeb do
     pipe_through [:browser, :auth]
 
@@ -50,12 +63,6 @@ defmodule WingManagerWeb.Router do
 
     live "/pilots/:id", PilotLive.Show, :show
     live "/pilots/:id/show/edit", PilotLive.Show, :edit
-  end
-
-  scope "/", WingManagerWeb do
-    pipe_through [:browser, :auth]
-
-    get "/", PageController, :home
   end
 
   scope "/admin", WingManagerWeb do
