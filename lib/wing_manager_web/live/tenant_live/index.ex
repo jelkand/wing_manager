@@ -1,7 +1,5 @@
 defmodule WingManagerWeb.TenantLive.Index do
   use WingManagerWeb, :live_view
-  on_mount WingManagerWeb.LiveAuth
-  on_mount WingManagerWeb.LiveTenant
 
   alias WingManager.Wing
   alias WingManager.Wing.Tenant

@@ -26,12 +26,6 @@ defmodule WingManagerWeb.Router do
     plug Guardian.Plug.EnsureAuthenticated
   end
 
-  # pipeline :ensure_tenant do
-  #   plug Triplex.EnsurePlug,
-  #     callback: fn -> nil end,
-  #     failure_callback: fn -> nil end
-  # end
-
   scope "/auth", WingManagerWeb do
     pipe_through [:browser, :auth]
     get "/logout", AuthController, :logout
@@ -44,12 +38,13 @@ defmodule WingManagerWeb.Router do
 
     get "/", PageController, :home
 
-    live "/tenants", TenantLive.Index, :index
-    live "/tenants/new", TenantLive.Index, :new
-    live "/tenants/:id/edit", TenantLive.Index, :edit
-
-    live "/tenants/:id", TenantLive.Show, :show
-    live "/tenants/:id/show/edit", TenantLive.Show, :edit
+    live_session :authenticated, on_mount: [{WingManagerWeb.LiveAuth, :ensure_authenticated}] do
+      live "/tenants", TenantLive.Index, :index
+      live "/tenants/new", TenantLive.Index, :new
+      live "/tenants/:id/edit", TenantLive.Index, :edit
+      live "/tenants/:id/show/edit", TenantLive.Show, :edit
+      live "/tenants/:id", TenantLive.Show, :show
+    end
   end
 
   scope "/:wing", WingManagerWeb do
@@ -57,12 +52,18 @@ defmodule WingManagerWeb.Router do
 
     get "/", PageController, :home
 
-    live "/pilots", PilotLive.Index, :index
-    live "/pilots/new", PilotLive.Index, :new
-    live "/pilots/:id/edit", PilotLive.Index, :edit
+    live_session :authenticated_and_tenant,
+      on_mount: [
+        {WingManagerWeb.LiveAuth, :ensure_authenticated},
+        {WingManagerWeb.LiveTenant, :ensure_tenant}
+      ] do
+      live "/pilots", PilotLive.Index, :index
+      live "/pilots/new", PilotLive.Index, :new
+      live "/pilots/:id/edit", PilotLive.Index, :edit
 
-    live "/pilots/:id", PilotLive.Show, :show
-    live "/pilots/:id/show/edit", PilotLive.Show, :edit
+      live "/pilots/:id", PilotLive.Show, :show
+      live "/pilots/:id/show/edit", PilotLive.Show, :edit
+    end
   end
 
   scope "/admin", WingManagerWeb do

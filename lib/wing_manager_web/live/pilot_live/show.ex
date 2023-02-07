@@ -1,7 +1,5 @@
 defmodule WingManagerWeb.PilotLive.Show do
   use WingManagerWeb, :live_view
-  on_mount WingManagerWeb.LiveAuth
-  on_mount WingManagerWeb.LiveTenant
 
   alias WingManager.Personnel
 
