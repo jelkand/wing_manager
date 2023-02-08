@@ -1,36 +1,26 @@
-<.container class="mt-10">
-  <.h2 underline label="Containers" />
-</.container>
-
-<.container
-  max_width="full"
-  class="flex items-center justify-center h-10 my-5 bg-gray-100 dark:bg-gray-800 dark:text-gray-400"
->
-  Max width "full"
-</.container>
-
-<.container
-  max_width="lg"
-  class="flex items-center justify-center h-10 my-5 bg-gray-100 dark:bg-gray-800 dark:text-gray-400"
->
-  Max width "lg"
-</.container>
-
-<.container
-  max_width="md"
-  class="flex items-center justify-center h-10 my-5 bg-gray-100 dark:bg-gray-800 dark:text-gray-400"
->
-  Max width "md"
-</.container>
-
-<.container
-  max_width="sm"
-  class="flex items-center justify-center h-10 my-5 bg-gray-100 dark:bg-gray-800 dark:text-gray-400"
->
-  Max width "sm"
-</.container>
-
-<.container>
+<div class="md:grid my-4 grid-cols-3">
+  <div class="col-span-2 m-4">
+    <.h1>DCS Wing Manager</.h1>
+    <.h5 class="italic dark:text-gray-400 text-gray-900">beta access</.h5>
+    <.ul>
+      <li class="">
+        Recruit and manage pilots
+      </li>
+      <li>
+        Log flights, kills, and objectives
+      </li>
+      <li>
+        Plan operations without stress
+      </li>
+    </.ul>
+  </div>
+  <div class="flex col-span-1 flex-col justify-center align-middle space-y-8 m-4">
+    <.button link_type="a" size="lg" label="Join a Wing" to={~p"/wings"} />
+    <.button link_type="a" size="lg" label="Create a Wing" to={~p"/wings/new"} />
+  </div>
+</div>
+<%!-- 
+<.container max_width="full">
   <div>
     <.h2 underline label="Links" />
     <.h5 label="Types" />
@@ -1450,4 +1440,4 @@
   </.accordion>
 </.container>
 
-<div class="mb-40"></div>
+<div class="mb-40"></div> --%>
