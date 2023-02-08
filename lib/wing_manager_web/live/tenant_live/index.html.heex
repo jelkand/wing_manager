@@ -30,7 +30,7 @@
   :if={@live_action in [:new, :edit]}
   id="tenant-modal"
   show
-  on_cancel={JS.navigate(~p"/tenants")}
+  on_cancel={JS.navigate(~p"/wings")}
 >
   <:title><%= @page_title %></:title>
   <.live_component
@@ -39,6 +39,6 @@
     title={@page_title}
     action={@live_action}
     tenant={@tenant}
-    navigate={~p"/tenants"}
+    navigate={~p"/wings"}
   />
 </.phx_modal>

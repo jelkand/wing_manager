@@ -33,7 +33,7 @@ defmodule WingManagerWeb.LiveTenant do
       socket =
         socket
         |> Phoenix.LiveView.put_flash(:error, "You must select a wing to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/tenants")
+        |> Phoenix.LiveView.redirect(to: ~p"/wings")
 
       {:halt, socket}
     end

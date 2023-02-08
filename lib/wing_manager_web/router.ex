@@ -39,11 +39,11 @@ defmodule WingManagerWeb.Router do
     get "/", PageController, :home
 
     live_session :authenticated, on_mount: [{WingManagerWeb.LiveAuth, :ensure_authenticated}] do
-      live "/tenants", TenantLive.Index, :index
-      live "/tenants/new", TenantLive.Index, :new
-      live "/tenants/:id/edit", TenantLive.Index, :edit
-      live "/tenants/:id/show/edit", TenantLive.Show, :edit
-      live "/tenants/:id", TenantLive.Show, :show
+      live "/wings", TenantLive.Index, :index
+      live "/wings/new", TenantLive.Index, :new
+      live "/wings/:id/edit", TenantLive.Index, :edit
+      live "/wings/:id/show/edit", TenantLive.Show, :edit
+      live "/wings/:id", TenantLive.Show, :show
     end
   end
 

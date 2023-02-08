@@ -17,14 +17,14 @@ defmodule WingManagerWeb.TenantLiveTest do
     setup [:create_tenant]
 
     test "lists all tenants", %{conn: conn, tenant: tenant} do
-      {:ok, _index_live, html} = live(conn, ~p"/tenants")
+      {:ok, _index_live, html} = live(conn, ~p"/wings")
 
       assert html =~ "Listing Tenants"
       assert html =~ tenant.name
     end
 
     test "saves new tenant", %{conn: conn} do
-      {:ok, index_live, _html} = live(conn, ~p"/tenants")
+      {:ok, index_live, _html} = live(conn, ~p"/wings")
 
       assert index_live |> element("a", "New Tenant") |> render_click() =~
                "New Tenant"
@@ -39,14 +39,14 @@ defmodule WingManagerWeb.TenantLiveTest do
         index_live
         |> form("#tenant-form", tenant: @create_attrs)
         |> render_submit()
-        |> follow_redirect(conn, ~p"/tenants")
+        |> follow_redirect(conn, ~p"/wings")
 
       assert html =~ "Tenant created successfully"
       assert html =~ "some name"
     end
 
     test "updates tenant in listing", %{conn: conn, tenant: tenant} do
-      {:ok, index_live, _html} = live(conn, ~p"/tenants")
+      {:ok, index_live, _html} = live(conn, ~p"/wings")
 
       assert index_live |> element("#tenants-#{tenant.id} a", "Edit") |> render_click() =~
                "Edit Tenant"
@@ -61,14 +61,14 @@ defmodule WingManagerWeb.TenantLiveTest do
         index_live
         |> form("#tenant-form", tenant: @update_attrs)
         |> render_submit()
-        |> follow_redirect(conn, ~p"/tenants")
+        |> follow_redirect(conn, ~p"/wings")
 
       assert html =~ "Tenant updated successfully"
       assert html =~ "some updated name"
     end
 
     test "deletes tenant in listing", %{conn: conn, tenant: tenant} do
-      {:ok, index_live, _html} = live(conn, ~p"/tenants")
+      {:ok, index_live, _html} = live(conn, ~p"/wings")
 
       assert index_live |> element("#tenants-#{tenant.id} a", "Delete") |> render_click()
       refute has_element?(index_live, "#tenant-#{tenant.id}")
