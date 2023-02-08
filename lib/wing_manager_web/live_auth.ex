@@ -37,18 +37,6 @@ defmodule WingManagerWeb.LiveAuth do
     end
   end
 
-  # Only loads auth, does not _require_ auth
-  # def on_mount(:default, _params, %{@token_key => guardian_token} = _session, socket) do
-  #   socket =
-  #     assign_new(socket, :current_user, fn ->
-  #       {:ok, user} = load_user(guardian_token)
-  #       user
-  #     end)
-
-  #   {:cont, socket}
-  #   #   {:halt, redirect(socket, to: "/login")}
-  # end
-
   @doc """
   Handles mounting and authenticating the current_user in LiveViews.
 

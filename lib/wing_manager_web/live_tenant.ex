@@ -4,21 +4,6 @@ defmodule WingManagerWeb.LiveTenant do
   alias WingManager.Wing
   @tenant_param "wing"
 
-  # loads tenant but does not enforce it
-  def on_mount(
-        :default,
-        %{@tenant_param => tenant_slug},
-        _session,
-        socket
-      ) do
-    socket =
-      assign_new(socket, :current_tenant, fn ->
-        Wing.get_tenant_by_slug(tenant_slug)
-      end)
-
-    {:cont, socket}
-  end
-
   defp mount_current_tenant(session, socket) do
     case session do
       %{@tenant_param => tenant_slug} ->
@@ -60,5 +45,5 @@ defmodule WingManagerWeb.LiveTenant do
     end
   end
 
-  defp tenant_home_path(socket), do: ~p"/#{socket.assigns.current_tenant.slug}"
+  defp tenant_home_path(socket), do: ~p"/#{socket.assigns.current_tenant.slug}/pilots"
 end
