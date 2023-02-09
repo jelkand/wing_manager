@@ -7,20 +7,20 @@
   </:actions>
 </.header>
 
-<.phx_table id="tenants" rows={@tenants} row_click={&JS.navigate(~p"/wings/#{&1}")}>
-  <:col :let={tenant} label="Name"><%= tenant.name %></:col>
-  <:col :let={tenant} label="Slug"><%= tenant.slug %></:col>
-  <:action :let={tenant}>
-    <.link navigate={~p"/#{tenant.slug}/pilots"}>Use</.link>
+<.phx_table id="wings" rows={@wings} row_click={&JS.navigate(~p"/wings/#{&1}")}>
+  <:col :let={wing} label="Name"><%= wing.name %></:col>
+  <:col :let={wing} label="Slug"><%= wing.slug %></:col>
+  <:action :let={wing}>
+    <.link navigate={~p"/#{wing.slug}/pilots"}>Use</.link>
   </:action>
-  <:action :let={tenant}>
+  <:action :let={wing}>
     <div class="sr-only">
-      <.link navigate={~p"/wings/#{tenant}"}>Show</.link>
+      <.link navigate={~p"/wings/#{wing}"}>Show</.link>
     </div>
-    <.link patch={~p"/wings/#{tenant}/edit"}>Edit</.link>
+    <.link patch={~p"/wings/#{wing}/edit"}>Edit</.link>
   </:action>
-  <:action :let={tenant}>
-    <.link phx-click={JS.push("delete", value: %{id: tenant.id})} data-confirm="Are you sure?">
+  <:action :let={wing}>
+    <.link phx-click={JS.push("delete", value: %{id: wing.id})} data-confirm="Are you sure?">
       Delete
     </.link>
   </:action>
@@ -28,17 +28,17 @@
 
 <.phx_modal
   :if={@live_action in [:new, :edit]}
-  id="tenant-modal"
+  id="wing-modal"
   show
   on_cancel={JS.navigate(~p"/wings")}
 >
   <:title><%= @page_title %></:title>
   <.live_component
     module={WingManagerWeb.WingLive.FormComponent}
-    id={@tenant.id || :new}
+    id={@wing.id || :new}
     title={@page_title}
     action={@live_action}
-    tenant={@tenant}
+    wing={@wing}
     navigate={~p"/wings"}
   />
 </.phx_modal>

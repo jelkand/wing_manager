@@ -1,33 +1,33 @@
 <.header>
-  <%= @tenant.name %>
+  <%= @wing.name %>
   <:subtitle>This is a wing record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/wings/#{@tenant}/show/edit"} phx-click={JS.push_focus()}>
+    <.link patch={~p"/wings/#{@wing}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit wing</.button>
     </.link>
   </:actions>
 </.header>
 
 <.list>
-  <:item title="Name"><%= @tenant.name %></:item>
-  <:item title="Slug"><%= @tenant.slug %></:item>
+  <:item title="Name"><%= @wing.name %></:item>
+  <:item title="Slug"><%= @wing.slug %></:item>
 </.list>
 
 <.back navigate={~p"/wings"}>Back to wings</.back>
 
 <.phx_modal
   :if={@live_action == :edit}
-  id="tenant-modal"
+  id="wing-modal"
   show
-  on_cancel={JS.patch(~p"/wings/#{@tenant}")}
+  on_cancel={JS.patch(~p"/wings/#{@wing}")}
 >
   <:title><%= @page_title %></:title>
   <.live_component
     module={WingManagerWeb.WingLive.FormComponent}
-    id={@tenant.id}
+    id={@wing.id}
     title={@page_title}
     action={@live_action}
-    tenant={@tenant}
-    navigate={~p"/wings/#{@tenant}"}
+    wing={@wing}
+    navigate={~p"/wings/#{@wing}"}
   />
 </.phx_modal>

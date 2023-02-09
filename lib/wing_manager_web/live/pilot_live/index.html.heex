@@ -1,7 +1,7 @@
 <.header class="dark:text-white">
   Listing Pilots
   <:actions>
-    <.link patch={~p"/#{@current_tenant.slug}/pilots/new"}>
+    <.link patch={~p"/#{@current_wing.slug}/pilots/new"}>
       <.button>New Pilot</.button>
     </.link>
   </:actions>
@@ -10,16 +10,16 @@
 <.phx_table
   id="pilots"
   rows={@pilots}
-  row_click={&JS.navigate(~p"/#{@current_tenant.slug}/pilots/#{&1}")}
+  row_click={&JS.navigate(~p"/#{@current_wing.slug}/pilots/#{&1}")}
 >
   <:col :let={pilot} label="Callsign"><%= pilot.callsign %></:col>
   <:col :let={pilot} label="Title"><%= pilot.title %></:col>
   <:col :let={pilot} label="Roles"><%= pilot.roles %></:col>
   <:action :let={pilot}>
     <div class="sr-only">
-      <.link navigate={~p"/#{@current_tenant.slug}/pilots/#{pilot}"}>Show</.link>
+      <.link navigate={~p"/#{@current_wing.slug}/pilots/#{pilot}"}>Show</.link>
     </div>
-    <.link patch={~p"/#{@current_tenant.slug}/pilots/#{pilot}/edit"}>Edit</.link>
+    <.link patch={~p"/#{@current_wing.slug}/pilots/#{pilot}/edit"}>Edit</.link>
   </:action>
   <:action :let={pilot}>
     <.link phx-click={JS.push("delete", value: %{id: pilot.id})} data-confirm="Are you sure?">
@@ -32,17 +32,17 @@
   :if={@live_action in [:new, :edit]}
   id="pilot-modal"
   show
-  on_cancel={JS.navigate(~p"/#{@current_tenant.slug}/pilots")}
+  on_cancel={JS.navigate(~p"/#{@current_wing.slug}/pilots")}
 >
   <:title><%= @page_title %></:title>
   <:subtitle>this is a subtitle</:subtitle>
   <.live_component
     module={WingManagerWeb.PilotLive.FormComponent}
     id={@pilot.id || :new}
-    tenant={@current_tenant.slug}
+    wing={@current_wing.slug}
     title={@page_title}
     action={@live_action}
     pilot={@pilot}
-    navigate={~p"/#{@current_tenant.slug}/pilots"}
+    navigate={~p"/#{@current_wing.slug}/pilots"}
   />
 </.phx_modal>

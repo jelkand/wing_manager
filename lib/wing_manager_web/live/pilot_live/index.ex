@@ -6,7 +6,7 @@ defmodule WingManagerWeb.PilotLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :pilots, list_pilots(socket.assigns.current_tenant.slug))}
+    {:ok, assign(socket, :pilots, list_pilots(socket.assigns.current_wing.slug))}
   end
 
   @impl true
@@ -17,7 +17,7 @@ defmodule WingManagerWeb.PilotLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Pilot")
-    |> assign(:pilot, Personnel.get_pilot!(id, socket.assigns.current_tenant.slug))
+    |> assign(:pilot, Personnel.get_pilot!(id, socket.assigns.current_wing.slug))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -34,19 +34,19 @@ defmodule WingManagerWeb.PilotLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    pilot = Personnel.get_pilot!(id, socket.assigns.current_tenant.slug)
-    {:ok, _} = Personnel.delete_pilot(pilot, socket.assigns.current_tenant.slug)
+    pilot = Personnel.get_pilot!(id, socket.assigns.current_wing.slug)
+    {:ok, _} = Personnel.delete_pilot(pilot, socket.assigns.current_wing.slug)
 
-    {:noreply, assign(socket, :pilots, list_pilots(socket.assigns.current_tenant.slug))}
+    {:noreply, assign(socket, :pilots, list_pilots(socket.assigns.current_wing.slug))}
   end
 
   @impl true
-  def handle_event("close_modal", _, %{assigns: %{current_tenant: current_tenant}} = socket) do
+  def handle_event("close_modal", _, %{assigns: %{current_wing: current_wing}} = socket) do
     # Go back to the :index live action
-    {:noreply, push_patch(socket, to: ~p"/#{current_tenant.slug}/pilots")}
+    {:noreply, push_patch(socket, to: ~p"/#{current_wing.slug}/pilots")}
   end
 
-  defp list_pilots(tenant) do
-    Personnel.list_pilots(tenant)
+  defp list_pilots(wing) do
+    Personnel.list_pilots(wing)
   end
 end

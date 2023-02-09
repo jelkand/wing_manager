@@ -1,41 +1,26 @@
-defmodule WingManager.WingFixtures do
+defmodule WingManager.OrganizationsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `WingManager.Wing` context.
+  entities via the `WingManager.Organizations` context.
   """
 
   @doc """
-  Generate a unique tenant slug.
+  Generate a unique wing slug.
   """
-  def unique_tenant_slug, do: "some slug#{System.unique_integer([:positive])}"
+  def unique_wing_slug, do: "some slug#{System.unique_integer([:positive])}"
 
   @doc """
-  Generate a tenant.
+  Generate a wing.
   """
-  def tenant_fixture(attrs \\ %{}) do
-    {:ok, tenant} =
+  def wing_fixture(attrs \\ %{}) do
+    {:ok, wing} =
       attrs
       |> Enum.into(%{
         name: "some name",
-        slug: unique_tenant_slug()
+        slug: unique_wing_slug()
       })
-      |> WingManager.Wing.create_tenant()
+      |> WingManager.Organizations.create_wing()
 
-    tenant
-  end
-
-  @doc """
-  Generate a tenant.
-  """
-  def tenant_fixture(attrs \\ %{}) do
-    {:ok, tenant} =
-      attrs
-      |> Enum.into(%{
-        name: "some name",
-        slug: "some slug"
-      })
-      |> WingManager.Wing.create_tenant()
-
-    tenant
+    wing
   end
 end

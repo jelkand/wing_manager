@@ -14,7 +14,7 @@ defmodule WingManagerWeb.Router do
 
     plug Triplex.ParamPlug,
       param: :wing,
-      tenant_handler: &WingManager.Wing.get_tenant_by_slug/1
+      wing_handler: &WingManager.Organizations.get_wing_by_slug/1
   end
 
   pipeline :api do
@@ -46,10 +46,10 @@ defmodule WingManagerWeb.Router do
 
     get "/", PageController, :home
 
-    live_session :authenticated_and_tenant,
+    live_session :authenticated_and_wing,
       on_mount: [
         {WingManagerWeb.UserAuth, :ensure_authenticated},
-        {WingManagerWeb.LiveTenant, :ensure_tenant}
+        {WingManagerWeb.LiveWing, :ensure_wing}
       ] do
       live "/pilots", PilotLive.Index, :index
       live "/pilots/new", PilotLive.Index, :new

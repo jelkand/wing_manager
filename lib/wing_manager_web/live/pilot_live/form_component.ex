@@ -51,14 +51,14 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
   end
 
   def handle_event("save", %{"pilot" => pilot_params}, socket) do
-    save_pilot(socket, socket.assigns.action, pilot_params, socket.assigns.tenant)
+    save_pilot(socket, socket.assigns.action, pilot_params, socket.assigns.wing)
   end
 
-  defp save_pilot(socket, :edit, pilot_params, tenant) do
+  defp save_pilot(socket, :edit, pilot_params, wing) do
     case Personnel.update_pilot(
            socket.assigns.pilot,
            pilot_params,
-           tenant
+           wing
          ) do
       {:ok, _pilot} ->
         {:noreply,
@@ -71,8 +71,8 @@ defmodule WingManagerWeb.PilotLive.FormComponent do
     end
   end
 
-  defp save_pilot(socket, :new, pilot_params, tenant) do
-    case Personnel.create_pilot(pilot_params, tenant) do
+  defp save_pilot(socket, :new, pilot_params, wing) do
+    case Personnel.create_pilot(pilot_params, wing) do
       {:ok, _pilot} ->
         {:noreply,
          socket

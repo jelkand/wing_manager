@@ -1,12 +1,12 @@
 defmodule WingManagerWeb.WingLive.Index do
   use WingManagerWeb, :live_view
 
-  alias WingManager.Wing
-  alias WingManager.Wing.Tenant
+  alias WingManager.Organizations
+  alias WingManager.Organizations.Wing
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :tenants, list_tenants())}
+    {:ok, assign(socket, :wings, list_wings())}
   end
 
   @impl true
@@ -16,31 +16,31 @@ defmodule WingManagerWeb.WingLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Tenant")
-    |> assign(:tenant, Wing.get_tenant!(id))
+    |> assign(:page_title, "Edit Wing")
+    |> assign(:wing, Organizations.get_wing!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Tenant")
-    |> assign(:tenant, %Tenant{})
+    |> assign(:page_title, "New Wing")
+    |> assign(:wing, %Wing{})
   end
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Tenants")
-    |> assign(:tenant, nil)
+    |> assign(:page_title, "Listing Wings")
+    |> assign(:wing, nil)
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    tenant = Wing.get_tenant!(id)
-    {:ok, _} = Wing.delete_tenant(tenant)
+    wing = Organizations.get_wing!(id)
+    {:ok, _} = Organizations.delete_wing(wing)
 
-    {:noreply, assign(socket, :tenants, list_tenants())}
+    {:noreply, assign(socket, :wings, list_wings())}
   end
 
-  defp list_tenants do
-    Wing.list_tenants()
+  defp list_wings do
+    Organizations.list_wings()
   end
 end

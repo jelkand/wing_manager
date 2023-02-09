@@ -1,8 +1,8 @@
-defmodule WingManager.Wing.Tenant do
+defmodule WingManager.Organizations.Wing do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "tenants" do
+  schema "wings" do
     field :name, :string
     field :slug, :string
 
@@ -14,8 +14,8 @@ defmodule WingManager.Wing.Tenant do
   end
 
   @doc false
-  def changeset(tenant, attrs) do
-    tenant
+  def changeset(wing, attrs) do
+    wing
     |> cast(attrs, [:slug, :name])
     |> validate_required([:slug, :name])
     |> downcase_slug()

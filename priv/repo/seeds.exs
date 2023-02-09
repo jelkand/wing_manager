@@ -11,7 +11,7 @@
 # and so on) as they will fail if something goes wrong.
 
 Triplex.create("cjtf")
-WingManager.Repo.insert!(%WingManager.Wing.Tenant{
+WingManager.Repo.insert!(%WingManager.Organizations.Wing{
     name: "Combined Joint Task Force"
     slug: "cjtf"
 })

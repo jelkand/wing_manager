@@ -1,7 +1,7 @@
 defmodule WingManagerWeb.WingLive.Show do
   use WingManagerWeb, :live_view
 
-  alias WingManager.Wing
+  alias WingManager.Organizations
 
   @impl true
   def mount(_params, _session, socket) do
@@ -13,7 +13,7 @@ defmodule WingManagerWeb.WingLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:tenant, Wing.get_tenant!(id))}
+     |> assign(:wing, Organizations.get_wing!(id))}
   end
 
   defp page_title(:show), do: "Show Wing"

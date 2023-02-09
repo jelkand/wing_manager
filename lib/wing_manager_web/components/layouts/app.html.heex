@@ -23,8 +23,8 @@
             to={~p"/wings"}
           >
             <Heroicons.paper_airplane solid class="w-6 h-6 mr-2 -rotate-45" />
-            <%= if assigns[:current_tenant] do %>
-              <%= @current_tenant.name %>
+            <%= if assigns[:current_wing] do %>
+              <%= @current_wing.name %>
             <% else %>
               Wing Manager
             <% end %>

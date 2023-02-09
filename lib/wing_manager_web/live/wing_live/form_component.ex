@@ -1,7 +1,7 @@
 defmodule WingManagerWeb.WingLive.FormComponent do
   use WingManagerWeb, :live_component
 
-  alias WingManager.Wing
+  alias WingManager.Organizations
 
   @impl true
   def render(assigns) do
@@ -9,13 +9,13 @@ defmodule WingManagerWeb.WingLive.FormComponent do
     <div>
       <.header>
         <%= @title %>
-        <:subtitle>Use this form to manage tenant records in your database.</:subtitle>
+        <:subtitle>Use this form to manage wing records in your database.</:subtitle>
       </.header>
 
       <.simple_form
         :let={f}
         for={@changeset}
-        id="tenant-form"
+        id="wing-form"
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
@@ -23,7 +23,7 @@ defmodule WingManagerWeb.WingLive.FormComponent do
         <.form_field form={f} field={:name} type="text_input" label="Name" />
         <.form_field form={f} field={:slug} type="text_input" label="Slug" />
         <:actions>
-          <.button phx-disable-with="Saving...">Save Tenant</.button>
+          <.button phx-disable-with="Saving...">Save Wing</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -31,8 +31,8 @@ defmodule WingManagerWeb.WingLive.FormComponent do
   end
 
   @impl true
-  def update(%{tenant: tenant} = assigns, socket) do
-    changeset = Wing.change_tenant(tenant)
+  def update(%{wing: wing} = assigns, socket) do
+    changeset = Organizations.change_wing(wing)
 
     {:ok,
      socket
@@ -41,25 +41,25 @@ defmodule WingManagerWeb.WingLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"tenant" => tenant_params}, socket) do
+  def handle_event("validate", %{"wing" => wing_params}, socket) do
     changeset =
-      socket.assigns.tenant
-      |> Wing.change_tenant(tenant_params)
+      socket.assigns.wing
+      |> Organizations.change_wing(wing_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
-  def handle_event("save", %{"tenant" => tenant_params}, socket) do
-    save_tenant(socket, socket.assigns.action, tenant_params)
+  def handle_event("save", %{"wing" => wing_params}, socket) do
+    save_wing(socket, socket.assigns.action, wing_params)
   end
 
-  defp save_tenant(socket, :edit, tenant_params) do
-    case Wing.update_tenant(socket.assigns.tenant, tenant_params) do
-      {:ok, _tenant} ->
+  defp save_wing(socket, :edit, wing_params) do
+    case Organizations.update_wing(socket.assigns.wing, wing_params) do
+      {:ok, _wing} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Tenant updated successfully")
+         |> put_flash(:info, "Wing updated successfully")
          |> push_navigate(to: socket.assigns.navigate)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -67,12 +67,12 @@ defmodule WingManagerWeb.WingLive.FormComponent do
     end
   end
 
-  defp save_tenant(socket, :new, tenant_params) do
-    case Wing.create_tenant(tenant_params) do
-      {:ok, _tenant} ->
+  defp save_wing(socket, :new, wing_params) do
+    case Organizations.create_wing(wing_params) do
+      {:ok, _wing} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Tenant created successfully")
+         |> put_flash(:info, "Wing created successfully")
          |> push_navigate(to: socket.assigns.navigate)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
