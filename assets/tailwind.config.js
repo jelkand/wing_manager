@@ -17,6 +17,7 @@ module.exports = {
         brand: "#FD4F00",
         primary: colors.blue,
         secondary: colors.pink,
+        discord: "#5865F2",
       },
     },
   },

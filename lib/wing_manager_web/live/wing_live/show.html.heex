@@ -1,9 +1,9 @@
 <.header>
-  Tenant <%= @tenant.id %>
-  <:subtitle>This is a tenant record from your database.</:subtitle>
+  <%= @tenant.name %>
+  <:subtitle>This is a wing record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/tenants/#{@tenant}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit tenant</.button>
+    <.link patch={~p"/wings/#{@tenant}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit wing</.button>
     </.link>
   </:actions>
 </.header>
@@ -13,21 +13,21 @@
   <:item title="Slug"><%= @tenant.slug %></:item>
 </.list>
 
-<.back navigate={~p"/wings"}>Back to tenants</.back>
+<.back navigate={~p"/wings"}>Back to wings</.back>
 
 <.phx_modal
   :if={@live_action == :edit}
   id="tenant-modal"
   show
-  on_cancel={JS.patch(~p"/tenants/#{@tenant}")}
+  on_cancel={JS.patch(~p"/wings/#{@tenant}")}
 >
   <:title><%= @page_title %></:title>
   <.live_component
-    module={WingManagerWeb.TenantLive.FormComponent}
+    module={WingManagerWeb.WingLive.FormComponent}
     id={@tenant.id}
     title={@page_title}
     action={@live_action}
     tenant={@tenant}
-    navigate={~p"/tenants/#{@tenant}"}
+    navigate={~p"/wings/#{@tenant}"}
   />
 </.phx_modal>

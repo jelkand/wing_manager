@@ -1,4 +1,4 @@
-defmodule WingManagerWeb.TenantLive.Index do
+defmodule WingManagerWeb.WingLive.Index do
   use WingManagerWeb, :live_view
 
   alias WingManager.Wing

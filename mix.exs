@@ -32,6 +32,7 @@ defmodule WingManager.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.0-rc.2", override: true},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
@@ -53,8 +54,8 @@ defmodule WingManager.MixProject do
       {:petal_components, "~> 0.19.0"},
       {:ueberauth, "~> 0.10"},
       {:ueberauth_discord, "~> 0.7"},
-      {:guardian, "~> 2.1"},
-      {:triplex, "~> 1.3.0-rc.1"}
+      {:triplex, "~> 1.3.0-rc.1"},
+      {:random_password, "~> 1.2"}
     ]
   end
 

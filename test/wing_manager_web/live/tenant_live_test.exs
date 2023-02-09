@@ -1,4 +1,4 @@
-defmodule WingManagerWeb.TenantLiveTest do
+defmodule WingManagerWeb.WingLiveTest do
   use WingManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
@@ -29,7 +29,7 @@ defmodule WingManagerWeb.TenantLiveTest do
       assert index_live |> element("a", "New Tenant") |> render_click() =~
                "New Tenant"
 
-      assert_patch(index_live, ~p"/tenants/new")
+      assert_patch(index_live, ~p"/wings/new")
 
       assert index_live
              |> form("#tenant-form", tenant: @invalid_attrs)
@@ -51,7 +51,7 @@ defmodule WingManagerWeb.TenantLiveTest do
       assert index_live |> element("#tenants-#{tenant.id} a", "Edit") |> render_click() =~
                "Edit Tenant"
 
-      assert_patch(index_live, ~p"/tenants/#{tenant}/edit")
+      assert_patch(index_live, ~p"/wings/#{tenant}/edit")
 
       assert index_live
              |> form("#tenant-form", tenant: @invalid_attrs)
@@ -79,19 +79,19 @@ defmodule WingManagerWeb.TenantLiveTest do
     setup [:create_tenant]
 
     test "displays tenant", %{conn: conn, tenant: tenant} do
-      {:ok, _show_live, html} = live(conn, ~p"/tenants/#{tenant}")
+      {:ok, _show_live, html} = live(conn, ~p"/wings/#{tenant}")
 
       assert html =~ "Show Tenant"
       assert html =~ tenant.name
     end
 
     test "updates tenant within modal", %{conn: conn, tenant: tenant} do
-      {:ok, show_live, _html} = live(conn, ~p"/tenants/#{tenant}")
+      {:ok, show_live, _html} = live(conn, ~p"/wings/#{tenant}")
 
       assert show_live |> element("a", "Edit") |> render_click() =~
                "Edit Tenant"
 
-      assert_patch(show_live, ~p"/tenants/#{tenant}/show/edit")
+      assert_patch(show_live, ~p"/wings/#{tenant}/show/edit")
 
       assert show_live
              |> form("#tenant-form", tenant: @invalid_attrs)
@@ -101,7 +101,7 @@ defmodule WingManagerWeb.TenantLiveTest do
         show_live
         |> form("#tenant-form", tenant: @update_attrs)
         |> render_submit()
-        |> follow_redirect(conn, ~p"/tenants/#{tenant}")
+        |> follow_redirect(conn, ~p"/wings/#{tenant}")
 
       assert html =~ "Tenant updated successfully"
       assert html =~ "some updated name"

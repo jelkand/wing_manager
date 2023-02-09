@@ -1,4 +1,4 @@
-defmodule WingManagerWeb.TenantLive.FormComponent do
+defmodule WingManagerWeb.WingLive.FormComponent do
   use WingManagerWeb, :live_component
 
   alias WingManager.Wing

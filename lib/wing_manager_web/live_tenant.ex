@@ -5,8 +5,6 @@ defmodule WingManagerWeb.LiveTenant do
   @tenant_param "wing"
 
   defp mount_current_tenant(params, socket) do
-    IO.inspect({@tenant_param, params}, label: "Mounting tenant")
-
     case params do
       %{@tenant_param => tenant_slug} ->
         Phoenix.Component.assign_new(socket, :current_tenant, fn ->
@@ -14,13 +12,11 @@ defmodule WingManagerWeb.LiveTenant do
         end)
 
       %{} ->
-        IO.puts("didn't get tenant")
         Phoenix.Component.assign_new(socket, :current_tenant, fn -> nil end)
     end
   end
 
   def on_mount(:mount_current_tenant, params, _session, socket) do
-    IO.inspect(params, label: "mounting tenant")
     {:cont, mount_current_tenant(params, socket)}
   end
 

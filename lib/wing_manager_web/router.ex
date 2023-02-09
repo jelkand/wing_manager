@@ -1,6 +1,8 @@
 defmodule WingManagerWeb.Router do
   use WingManagerWeb, :router
 
+  import WingManagerWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule WingManagerWeb.Router do
     plug :put_root_layout, {WingManagerWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
 
     plug Triplex.ParamPlug,
       param: :wing,
@@ -18,43 +21,34 @@ defmodule WingManagerWeb.Router do
     plug :accepts, ["json"]
   end
 
-  pipeline :auth do
-    plug WingManager.Accounts.Pipeline
-  end
-
-  pipeline :ensure_auth do
-    plug Guardian.Plug.EnsureAuthenticated
-  end
-
   scope "/auth", WingManagerWeb do
-    pipe_through [:browser, :auth]
-    get "/logout", AuthController, :logout
-    get "/:provider", AuthController, :request
-    get "/:provider/callback", AuthController, :callback
+    pipe_through [:browser]
+    get "/:provider", OAuthController, :request
+    get "/:provider/callback", OAuthController, :callback
   end
 
   scope "/", WingManagerWeb do
-    pipe_through [:browser, :auth]
+    pipe_through [:browser]
 
     get "/", PageController, :home
 
-    live_session :authenticated, on_mount: [{WingManagerWeb.LiveAuth, :ensure_authenticated}] do
-      live "/wings", TenantLive.Index, :index
-      live "/wings/new", TenantLive.Index, :new
-      live "/wings/:id/edit", TenantLive.Index, :edit
-      live "/wings/:id/show/edit", TenantLive.Show, :edit
-      live "/wings/:id", TenantLive.Show, :show
+    live_session :authenticated, on_mount: [{WingManagerWeb.UserAuth, :ensure_authenticated}] do
+      live "/wings", WingLive.Index, :index
+      live "/wings/new", WingLive.Index, :new
+      live "/wings/:id/edit", WingLive.Index, :edit
+      live "/wings/:id/show/edit", WingLive.Show, :edit
+      live "/wings/:id", WingLive.Show, :show
     end
   end
 
   scope "/:wing", WingManagerWeb do
-    pipe_through [:browser, :auth]
+    pipe_through [:browser, :require_authenticated_user]
 
     get "/", PageController, :home
 
     live_session :authenticated_and_tenant,
       on_mount: [
-        {WingManagerWeb.LiveAuth, :ensure_authenticated},
+        {WingManagerWeb.UserAuth, :ensure_authenticated},
         {WingManagerWeb.LiveTenant, :ensure_tenant}
       ] do
       live "/pilots", PilotLive.Index, :index
@@ -67,7 +61,7 @@ defmodule WingManagerWeb.Router do
   end
 
   scope "/admin", WingManagerWeb do
-    pipe_through [:browser, :auth]
+    pipe_through [:browser, :require_authenticated_user]
   end
 
   # Other scopes may use custom stacks.
@@ -89,6 +83,44 @@ defmodule WingManagerWeb.Router do
 
       live_dashboard "/dashboard", metrics: WingManagerWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
+    end
+  end
+
+  ## Authentication routes
+
+  scope "/", WingManagerWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
+
+    live_session :redirect_if_user_is_authenticated,
+      on_mount: [{WingManagerWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+      live "/users/register", UserRegistrationLive, :new
+      live "/users/log_in", UserLoginLive, :new
+      live "/users/reset_password", UserForgotPasswordLive, :new
+      live "/users/reset_password/:token", UserResetPasswordLive, :edit
+    end
+
+    post "/users/log_in", UserSessionController, :create
+  end
+
+  scope "/", WingManagerWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :require_authenticated_user,
+      on_mount: [{WingManagerWeb.UserAuth, :ensure_authenticated}] do
+      live "/users/settings", UserSettingsLive, :edit
+      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+    end
+  end
+
+  scope "/", WingManagerWeb do
+    pipe_through [:browser]
+
+    delete "/users/log_out", UserSessionController, :delete
+
+    live_session :current_user,
+      on_mount: [{WingManagerWeb.UserAuth, :mount_current_user}] do
+      live "/users/confirm/:token", UserConfirmationLive, :edit
+      live "/users/confirm", UserConfirmationInstructionsLive, :new
     end
   end
 end

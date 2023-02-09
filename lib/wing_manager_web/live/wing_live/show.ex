@@ -1,4 +1,4 @@
-defmodule WingManagerWeb.TenantLive.Show do
+defmodule WingManagerWeb.WingLive.Show do
   use WingManagerWeb, :live_view
 
   alias WingManager.Wing
@@ -16,6 +16,6 @@ defmodule WingManagerWeb.TenantLive.Show do
      |> assign(:tenant, Wing.get_tenant!(id))}
   end
 
-  defp page_title(:show), do: "Show Tenant"
-  defp page_title(:edit), do: "Edit Tenant"
+  defp page_title(:show), do: "Show Wing"
+  defp page_title(:edit), do: "Edit Wing"
 end
