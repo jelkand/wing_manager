@@ -1,0 +1,44 @@
+<.header>
+  Listing Kills
+  <:actions>
+    <.link patch={~p"/#{@current_wing.slug}/kills/new"}>
+      <.button>New Kill</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.phx_table
+  id="kills"
+  rows={@kills}
+  row_click={&JS.navigate(~p"/#{@current_wing.slug}/kills/#{&1}")}
+>
+  <:col :let={kill} label="Pilot"><%= kill.pilot.callsign %></:col>
+  <:col :let={kill} label="Target"><%= kill.target %></:col>
+  <:action :let={kill}>
+    <div class="sr-only">
+      <.link navigate={~p"/#{@current_wing.slug}/kills/#{kill}"}>Show</.link>
+    </div>
+    <.link patch={~p"/#{@current_wing.slug}/kills/#{kill}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={kill}>
+    <.link phx-click={JS.push("delete", value: %{id: kill.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.phx_table>
+
+<.phx_modal
+  :if={@live_action in [:new, :edit]}
+  id="kill-modal"
+  show
+  on_cancel={JS.navigate(~p"/kills")}
+>
+  <.live_component
+    module={WingManagerWeb.KillLive.FormComponent}
+    id={@kill.id || :new}
+    title={@page_title}
+    action={@live_action}
+    kill={@kill}
+    navigate={~p"/kills"}
+  />
+</.phx_modal>

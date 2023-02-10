@@ -57,6 +57,13 @@ defmodule WingManagerWeb.Router do
 
       live "/pilots/:id", PilotLive.Show, :show
       live "/pilots/:id/show/edit", PilotLive.Show, :edit
+
+      live "/kills", KillLive.Index, :index
+      live "/kills/new", KillLive.Index, :new
+      live "/kills/:id/edit", KillLive.Index, :edit
+
+      live "/kills/:id", KillLive.Show, :show
+      live "/kills/:id/show/edit", KillLive.Show, :edit
     end
   end
 

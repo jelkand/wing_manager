@@ -6,7 +6,8 @@ defmodule WingManager.Personnel.Pilot do
     field :callsign, :string
     field :roles, {:array, :string}
     field :title, :string
-    field :user_id, :id
+    belongs_to :user, WingManager.Accounts.User
+    has_many :kills, WingManager.Scoring.Kill
 
     timestamps()
   end

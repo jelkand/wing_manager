@@ -2,6 +2,7 @@ defmodule WingManager.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @schema_prefix "public"
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
@@ -13,6 +14,8 @@ defmodule WingManager.Accounts.User do
     field :discord_discriminator, :string
     field :discord_id, :string
     field :discord_username, :string
+
+    has_many :pilots, WingManager.Personnel.Pilot
 
     timestamps()
   end
@@ -109,7 +112,10 @@ defmodule WingManager.Accounts.User do
 
     if mark_password_updated? && password_updated? do
       changeset
-      |> put_change(:updated_password_at, NaiveDateTime.new(Date.t(), Time.t()))
+      |> put_change(
+        :updated_password_at,
+        NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      )
     else
       changeset
     end

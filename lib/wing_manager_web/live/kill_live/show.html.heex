@@ -1,0 +1,31 @@
+<.header>
+  Kill <%= @kill.id %>
+  <:subtitle>This is a kill record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/#{@current_wing.slug}/kills/#{@kill}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit kill</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Target"><%= @kill.target %></:item>
+</.list>
+
+<.back navigate={~p"/kills"}>Back to kills</.back>
+
+<.phx_modal
+  :if={@live_action == :edit}
+  id="kill-modal"
+  show
+  on_cancel={JS.patch(~p"/#{@current_wing.slug}/kills/#{@kill}")}
+>
+  <.live_component
+    module={WingManagerWeb.KillLive.FormComponent}
+    id={@kill.id}
+    title={@page_title}
+    action={@live_action}
+    kill={@kill}
+    navigate={~p"/#{@current_wing.slug}/kills/#{@kill}"}
+  />
+</.phx_modal>
