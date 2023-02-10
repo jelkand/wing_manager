@@ -15,10 +15,16 @@
     </.ul>
   </div>
   <div class="flex col-span-1 flex-col justify-center align-middle space-y-8 m-4">
-    <.button link_type="a" size="lg" label="Join a Wing" to={~p"/wings"} />
-    <.button link_type="a" size="lg" label="Create a Wing" to={~p"/wings/new"} />
+    <.button link_type="a" size="lg" label="Register" to={~p"/users/register"} />
+    <.button link_type="a" size="lg" label="Sign in" to={~p"/users/log_in"} />
   </div>
 </div>
+
+<.card>
+  <.card_content category="Article" class="max-w-sm" heading="Enhance your Phoenix development">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget leo interdum, feugiat ligula eu, facilisis massa. Nunc sollicitudin massa a elit laoreet.
+  </.card_content>
+</.card>
 <%!-- 
 <.container max_width="full">
   <div>
