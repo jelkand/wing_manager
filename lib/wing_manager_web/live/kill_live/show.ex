@@ -13,7 +13,7 @@ defmodule WingManagerWeb.KillLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:kill, Scoring.get_kill!(id, socket.assigns.current_wing.slug))}
+     |> assign(:kill, Scoring.get_kill!(id))}
   end
 
   defp page_title(:show), do: "Show Kill"

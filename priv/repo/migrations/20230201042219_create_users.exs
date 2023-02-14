@@ -10,5 +10,7 @@ defmodule WingManager.Repo.Migrations.CreateUsers do
 
       timestamps()
     end
+
+    create unique_index(:users, [:discord_id])
   end
 end

@@ -6,7 +6,7 @@ defmodule WingManagerWeb.KillLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :kills, list_kills_and_pilots(socket.assigns.current_wing.slug))}
+    {:ok, assign(socket, :kills, list_kills_and_pilots())}
   end
 
   @impl true
@@ -17,7 +17,7 @@ defmodule WingManagerWeb.KillLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Kill")
-    |> assign(:kill, Scoring.get_kill!(id, socket.assigns.current_wing.slug))
+    |> assign(:kill, Scoring.get_kill!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -34,14 +34,14 @@ defmodule WingManagerWeb.KillLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    kill = Scoring.get_kill!(id, socket.assigns.current_wing.slug)
-    {:ok, _} = Scoring.delete_kill(kill, socket.assigns.current_wing.slug)
+    kill = Scoring.get_kill!(id)
+    {:ok, _} = Scoring.delete_kill(kill)
 
-    {:noreply, assign(socket, :kills, list_kills_and_pilots(socket.assigns.current_wing.slug))}
+    {:noreply, assign(socket, :kills, list_kills_and_pilots())}
   end
 
-  defp list_kills_and_pilots(wing) do
-    Scoring.list_kills_with_pilots(wing)
+  defp list_kills_and_pilots do
+    Scoring.list_kills_with_pilots()
     |> IO.inspect()
   end
 end

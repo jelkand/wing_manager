@@ -10,8 +10,6 @@ import Config
 config :wing_manager,
   ecto_repos: [WingManager.Repo]
 
-config :triplex, repo: WingManager.Repo
-
 # Configures the endpoint
 config :wing_manager, WingManagerWeb.Endpoint,
   url: [host: "wing-manager.local"],

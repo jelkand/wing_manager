@@ -54,7 +54,7 @@ defmodule WingManagerWeb.KillLive.FormComponent do
   end
 
   defp save_kill(socket, :edit, kill_params) do
-    case Scoring.update_kill(socket.assigns.kill, kill_params, socket.assigns.current_wing.slug) do
+    case Scoring.update_kill(socket.assigns.kill, kill_params) do
       {:ok, _kill} ->
         {:noreply,
          socket

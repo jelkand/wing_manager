@@ -2,6 +2,7 @@ defmodule WingManagerWeb.Router do
   use WingManagerWeb, :router
 
   import WingManagerWeb.UserAuth
+  import WingManagerWeb.WingLoader
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -11,10 +12,7 @@ defmodule WingManagerWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
-
-    plug Triplex.ParamPlug,
-      param: :wing,
-      wing_handler: &WingManager.Organizations.get_wing_by_slug/1
+    plug :fetch_current_wing
   end
 
   pipeline :api do
@@ -49,7 +47,7 @@ defmodule WingManagerWeb.Router do
     live_session :authenticated_and_wing,
       on_mount: [
         {WingManagerWeb.UserAuth, :ensure_authenticated},
-        {WingManagerWeb.LiveWing, :ensure_wing}
+        {WingManagerWeb.WingLoader, :ensure_wing}
       ] do
       live "/pilots", PilotLive.Index, :index
       live "/pilots/new", PilotLive.Index, :new

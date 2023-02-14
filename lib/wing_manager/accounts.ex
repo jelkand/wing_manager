@@ -18,7 +18,7 @@ defmodule WingManager.Accounts do
 
   """
   def list_users do
-    Repo.all(User)
+    Repo.all(User, skip_wing_slug: true)
   end
 
   @doc """
@@ -35,7 +35,7 @@ defmodule WingManager.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id), do: Repo.get!(User, id, skip_wing_slug: true)
 
   ## Database getters
 
@@ -52,7 +52,7 @@ defmodule WingManager.Accounts do
 
   """
   def get_user_by_email(email) when is_binary(email) do
-    Repo.get_by(User, email: email)
+    Repo.get_by(User, email: email, skip_wing_slug: true)
   end
 
   @doc """
@@ -69,7 +69,7 @@ defmodule WingManager.Accounts do
   """
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
-    user = Repo.get_by(User, email: email)
+    user = Repo.get_by(User, email: email, skip_wing_slug: true)
     if User.valid_password?(user, password), do: user
   end
 
@@ -85,7 +85,8 @@ defmodule WingManager.Accounts do
       nil
 
   """
-  def get_user_by_discord_id(discord_id), do: Repo.get_by(User, %{discord_id: discord_id})
+  def get_user_by_discord_id(discord_id),
+    do: Repo.get_by(User, %{discord_id: discord_id}, skip_wing_slug: true)
 
   @doc """
   Given an Ueberauth struct, looks up a user by discord ID or registers one.
@@ -118,7 +119,7 @@ defmodule WingManager.Accounts do
 
   """
   def delete_user(%User{} = user) do
-    Repo.delete(user)
+    Repo.delete(user, skip_wing_slug: true)
   end
 
   ## User registration
@@ -138,7 +139,7 @@ defmodule WingManager.Accounts do
   def register_user(attrs) do
     %User{}
     |> User.registration_changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(skip_wing_slug: true)
   end
 
   @doc """
@@ -159,7 +160,7 @@ defmodule WingManager.Accounts do
 
     %User{}
     |> User.discord_registration_changeset(attrs, mark_password_updated: false)
-    |> Repo.insert()
+    |> Repo.insert(skip_wing_slug: true)
   end
 
   @doc """
@@ -224,8 +225,9 @@ defmodule WingManager.Accounts do
     context = "change:#{user.email}"
 
     with {:ok, query} <- UserToken.verify_change_email_token_query(token, context),
-         %UserToken{sent_to: email} <- Repo.one(query),
-         {:ok, _} <- Repo.transaction(user_email_multi(user, email, context)) do
+         %UserToken{sent_to: email} <- Repo.one(query, skip_wing_slug: true),
+         {:ok, _} <-
+           Repo.transaction(user_email_multi(user, email, context), skip_wing_slug: true) do
       :ok
     else
       _ -> :error
@@ -239,8 +241,10 @@ defmodule WingManager.Accounts do
       |> User.confirm_changeset()
 
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, [context]))
+    |> Ecto.Multi.update(:user, changeset, skip_wing_slug: true)
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, [context]),
+      skip_wing_slug: true
+    )
   end
 
   @doc ~S"""
@@ -256,7 +260,7 @@ defmodule WingManager.Accounts do
       when is_function(update_email_url_fun, 1) do
     {encoded_token, user_token} = UserToken.build_email_token(user, "change:#{current_email}")
 
-    Repo.insert!(user_token)
+    Repo.insert!(user_token, skip_wing_slug: true)
     UserNotifier.deliver_update_email_instructions(user, update_email_url_fun.(encoded_token))
   end
 
@@ -294,8 +298,10 @@ defmodule WingManager.Accounts do
       |> User.validate_current_password(password)
 
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
+    |> Ecto.Multi.update(:user, changeset, skip_wing_slug: true)
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all),
+      skip_wing_slug: true
+    )
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
@@ -310,7 +316,7 @@ defmodule WingManager.Accounts do
   """
   def generate_user_session_token(user) do
     {token, user_token} = UserToken.build_session_token(user)
-    Repo.insert!(user_token)
+    Repo.insert!(user_token, skip_wing_slug: true)
     token
   end
 
@@ -319,14 +325,14 @@ defmodule WingManager.Accounts do
   """
   def get_user_by_session_token(token) do
     {:ok, query} = UserToken.verify_session_token_query(token)
-    Repo.one(query)
+    Repo.one(query, skip_wing_slug: true)
   end
 
   @doc """
   Deletes the signed token with the given context.
   """
   def delete_user_session_token(token) do
-    Repo.delete_all(UserToken.token_and_context_query(token, "session"))
+    Repo.delete_all(UserToken.token_and_context_query(token, "session"), skip_wing_slug: true)
     :ok
   end
 
@@ -350,7 +356,7 @@ defmodule WingManager.Accounts do
       {:error, :already_confirmed}
     else
       {encoded_token, user_token} = UserToken.build_email_token(user, "confirm")
-      Repo.insert!(user_token)
+      Repo.insert!(user_token, skip_wing_slug: true)
       UserNotifier.deliver_confirmation_instructions(user, confirmation_url_fun.(encoded_token))
     end
   end
@@ -363,7 +369,7 @@ defmodule WingManager.Accounts do
   """
   def confirm_user(token) do
     with {:ok, query} <- UserToken.verify_email_token_query(token, "confirm"),
-         %User{} = user <- Repo.one(query),
+         %User{} = user <- Repo.one(query, skip_wing_slug: true),
          {:ok, %{user: user}} <- Repo.transaction(confirm_user_multi(user)) do
       {:ok, user}
     else
@@ -373,8 +379,10 @@ defmodule WingManager.Accounts do
 
   defp confirm_user_multi(user) do
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, User.confirm_changeset(user))
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, ["confirm"]))
+    |> Ecto.Multi.update(:user, User.confirm_changeset(user), skip_wing_slug: true)
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, ["confirm"]),
+      skip_wing_slug: true
+    )
   end
 
   ## Reset password
@@ -391,7 +399,7 @@ defmodule WingManager.Accounts do
   def deliver_user_reset_password_instructions(%User{} = user, reset_password_url_fun)
       when is_function(reset_password_url_fun, 1) do
     {encoded_token, user_token} = UserToken.build_email_token(user, "reset_password")
-    Repo.insert!(user_token)
+    Repo.insert!(user_token, skip_wing_slug: true)
     UserNotifier.deliver_reset_password_instructions(user, reset_password_url_fun.(encoded_token))
   end
 
@@ -409,7 +417,7 @@ defmodule WingManager.Accounts do
   """
   def get_user_by_reset_password_token(token) do
     with {:ok, query} <- UserToken.verify_email_token_query(token, "reset_password"),
-         %User{} = user <- Repo.one(query) do
+         %User{} = user <- Repo.one(query, skip_wing_slug: true) do
       user
     else
       _ -> nil
@@ -430,8 +438,10 @@ defmodule WingManager.Accounts do
   """
   def reset_user_password(user, attrs) do
     Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, User.password_changeset(user, attrs))
-    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all))
+    |> Ecto.Multi.update(:user, User.password_changeset(user, attrs), skip_wing_slug: true)
+    |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, :all),
+      skip_wing_slug: true
+    )
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}

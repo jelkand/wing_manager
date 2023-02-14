@@ -17,8 +17,8 @@ defmodule WingManager.Scoring do
       [%Kill{}, ...]
 
   """
-  def list_kills(wing) do
-    Repo.all(Kill, prefix: Triplex.to_prefix(wing))
+  def list_kills do
+    Repo.all(Kill)
   end
 
   @doc """
@@ -30,10 +30,10 @@ defmodule WingManager.Scoring do
       [%Kill{}, ...]
 
   """
-  def list_kills_with_pilots(wing) do
+  def list_kills_with_pilots do
     Kill
     |> preload(:pilot)
-    |> Repo.all(prefix: Triplex.to_prefix(wing))
+    |> Repo.all()
   end
 
   @doc """
@@ -50,7 +50,7 @@ defmodule WingManager.Scoring do
       ** (Ecto.NoResultsError)
 
   """
-  def get_kill!(id, wing), do: Repo.get!(Kill, id, prefix: Triplex.to_prefix(wing))
+  def get_kill!(id), do: Repo.get!(Kill, id)
 
   @doc """
   Creates a kill.
@@ -64,10 +64,10 @@ defmodule WingManager.Scoring do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_kill(attrs \\ %{}, wing) do
+  def create_kill(attrs \\ %{}) do
     %Kill{}
     |> Kill.changeset(attrs)
-    |> Repo.insert(prefix: Triplex.to_prefix(wing))
+    |> Repo.insert()
   end
 
   @doc """
@@ -82,10 +82,10 @@ defmodule WingManager.Scoring do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_kill(%Kill{} = kill, attrs, wing) do
+  def update_kill(%Kill{} = kill, attrs) do
     kill
     |> Kill.changeset(attrs)
-    |> Repo.update(prefix: Triplex.to_prefix(wing))
+    |> Repo.update()
   end
 
   @doc """
@@ -100,8 +100,8 @@ defmodule WingManager.Scoring do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_kill(%Kill{} = kill, wing) do
-    Repo.delete(kill, prefix: Triplex.to_prefix(wing))
+  def delete_kill(%Kill{} = kill) do
+    Repo.delete(kill)
   end
 
   @doc """

@@ -17,8 +17,8 @@ defmodule WingManager.Personnel do
       [%Pilot{}, ...]
 
   """
-  def list_pilots(wing) do
-    Repo.all(Pilot, prefix: Triplex.to_prefix(wing))
+  def list_pilots do
+    Repo.all(Pilot)
   end
 
   @doc """
@@ -35,7 +35,7 @@ defmodule WingManager.Personnel do
       ** (Ecto.NoResultsError)
 
   """
-  def get_pilot!(id, wing), do: Repo.get!(Pilot, id, prefix: Triplex.to_prefix(wing))
+  def get_pilot!(id), do: Repo.get!(Pilot, id)
 
   @doc """
   Creates a pilot.
@@ -49,10 +49,10 @@ defmodule WingManager.Personnel do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_pilot(attrs \\ %{}, wing) do
+  def create_pilot(attrs \\ %{}) do
     %Pilot{}
     |> Pilot.changeset(attrs)
-    |> Repo.insert(prefix: Triplex.to_prefix(wing))
+    |> Repo.insert()
   end
 
   @doc """
@@ -67,10 +67,10 @@ defmodule WingManager.Personnel do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_pilot(%Pilot{} = pilot, attrs, wing) do
+  def update_pilot(%Pilot{} = pilot, attrs) do
     pilot
     |> Pilot.changeset(attrs)
-    |> Repo.update(prefix: Triplex.to_prefix(wing))
+    |> Repo.update()
   end
 
   @doc """
@@ -85,8 +85,8 @@ defmodule WingManager.Personnel do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_pilot(%Pilot{} = pilot, wing) do
-    Repo.delete(pilot, prefix: Triplex.to_prefix(wing))
+  def delete_pilot(%Pilot{} = pilot) do
+    Repo.delete(pilot)
   end
 
   @doc """

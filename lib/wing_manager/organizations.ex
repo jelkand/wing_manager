@@ -18,7 +18,7 @@ defmodule WingManager.Organizations do
 
   """
   def list_wings do
-    Repo.all(Wing)
+    Repo.all(Wing, skip_wing_slug: true)
   end
 
   @doc """
@@ -35,10 +35,12 @@ defmodule WingManager.Organizations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_wing!(id), do: Repo.get!(Wing, id)
+  def get_wing!(id), do: Repo.get!(Wing, id, skip_wing_slug: true)
 
   def get_wing_by_slug(nil), do: nil
-  def get_wing_by_slug(slug), do: Repo.get_by(Wing, slug: String.downcase(slug))
+
+  def get_wing_by_slug(slug),
+    do: Repo.get_by(Wing, slug: String.downcase(slug), skip_wing_slug: true)
 
   @doc """
   Creates a wing.
@@ -55,7 +57,7 @@ defmodule WingManager.Organizations do
   def create_wing(attrs \\ %{}) do
     %Wing{}
     |> Wing.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(skip_wing_slug: true)
   end
 
   @doc """
@@ -73,7 +75,7 @@ defmodule WingManager.Organizations do
   def update_wing(%Wing{} = wing, attrs) do
     wing
     |> Wing.changeset(attrs)
-    |> Repo.update()
+    |> Repo.update(skip_wing_slug: true)
   end
 
   @doc """
@@ -89,7 +91,7 @@ defmodule WingManager.Organizations do
 
   """
   def delete_wing(%Wing{} = wing) do
-    Repo.delete(wing)
+    Repo.delete(wing, skip_wing_slug: true)
   end
 
   @doc """
